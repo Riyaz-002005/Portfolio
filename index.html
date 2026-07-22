@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="NOVAForge Gamer Portal - Your Cross-Platform Gaming Command Center. Sync Xbox, PlayStation, Steam & Epic Games accounts, track playtimes, finished games, and AI recommendations.">
+    <title>NOVAForge | Gamer Command Center Portal</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Login Stylesheet -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Background Particle Canvas & Hero Overlay -->
+    <canvas id="particleCanvas"></canvas>
+    <div class="bg-overlay"></div>
+    <div class="glow-orb orb-1"></div>
+    <div class="glow-orb orb-2"></div>
+    <div class="glow-orb orb-3"></div>
+
+    <!-- Mouse Glow Follower -->
+    <div class="cursor-glow" id="cursorGlow"></div>
+
+    <!-- Main Container -->
+    <main class="login-wrapper">
+        <!-- Gamer Header Branding -->
+        <header class="brand-header">
+            <div class="logo-container">
+                <img src="images/logo.png" alt="NOVAForge Logo" class="brand-logo-img">
+                <h1 class="brand-title">NOVA<span class="highlight">Forge</span></h1>
+            </div>
+            <p class="brand-tagline">Cross-Platform Gamer Command Center</p>
+        </header>
+
+        <!-- Glassmorphism Gamer Card -->
+        <div class="glass-card login-card" id="loginCard">
+            <div class="card-header">
+                <h2 class="card-title"><i class="fa-solid fa-headset"></i> Gamer Portal Sync</h2>
+                <p class="card-subtitle">Sign in to track playtimes, trophies & next games to play</p>
+            </div>
+
+            <!-- Login Form -->
+            <form id="loginForm" novalidate>
+                <!-- GamerTag / Username Field -->
+                <div class="input-group">
+                    <label for="username">GamerTag / Username</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-gamepad input-icon"></i>
+                        <input type="text" id="username" placeholder="CyberKnight_99" required autocomplete="username">
+                        <span class="focus-border"></span>
+                    </div>
+                    <small class="error-msg" id="usernameError">Please enter your GamerTag</small>
+                </div>
+
+                <!-- Email Field -->
+                <div class="input-group">
+                    <label for="email">Gamer Email</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-envelope input-icon"></i>
+                        <input type="email" id="email" placeholder="gamer@novaforge.com" required autocomplete="email">
+                        <span class="focus-border"></span>
+                    </div>
+                    <small class="error-msg" id="emailError">Please enter a valid email address</small>
+                </div>
+
+                <!-- Password Field -->
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-shield-halved input-icon"></i>
+                        <input type="password" id="password" placeholder="••••••••••••" required autocomplete="current-password">
+                        <button type="button" class="toggle-password" id="togglePasswordBtn" aria-label="Toggle password visibility">
+                            <i class="fa-solid fa-eye" id="togglePasswordIcon"></i>
+                        </button>
+                        <span class="focus-border"></span>
+                    </div>
+                    <small class="error-msg" id="passwordError">Password must be at least 6 characters</small>
+                </div>
+
+                <!-- Options Row -->
+                <div class="options-row">
+                    <label class="remember-me">
+                        <input type="checkbox" id="rememberMe">
+                        <span class="custom-checkbox"><i class="fa-solid fa-check"></i></span>
+                        <span class="checkbox-label">Stay Signed In</span>
+                    </label>
+                    <a href="#" class="forgot-link" id="forgotPasswordBtn">Recover Passkey?</a>
+                </div>
+
+                <!-- Submit & Guest Buttons -->
+                <div class="button-group">
+                    <button type="submit" class="btn btn-primary btn-glow" id="loginBtn">
+                        <span class="btn-text">LAUNCH COMMAND CENTER</span>
+                        <i class="fa-solid fa-bolt btn-icon"></i>
+                        <span class="btn-spinner" id="loginSpinner"></span>
+                    </button>
+
+                    <button type="button" class="btn btn-secondary" id="guestBtn">
+                        <i class="fa-solid fa-ghost"></i>
+                        <span>Continue as Guest Gamer</span>
+                    </button>
+                </div>
+            </form>
+
+            <!-- Platform Account Sync Divider -->
+            <div class="social-divider">
+                <span>CONNECT PLATFORM ACCOUNTS</span>
+            </div>
+
+            <!-- Gaming Platform Grid -->
+            <div class="social-grid">
+                <button class="social-btn steam-btn" title="Sync with Steam" onclick="handleSocialLogin('Steam')">
+                    <i class="fa-brands fa-steam"></i>
+                    <span>Steam</span>
+                </button>
+                <button class="social-btn psn-btn" title="Sync with PlayStation Network" onclick="handleSocialLogin('PlayStation')">
+                    <i class="fa-brands fa-playstation"></i>
+                    <span>PlayStation</span>
+                </button>
+                <button class="social-btn xbox-btn" title="Sync with Xbox Network" onclick="handleSocialLogin('Xbox')">
+                    <i class="fa-brands fa-xbox"></i>
+                    <span>Xbox</span>
+                </button>
+                <button class="social-btn epic-btn" title="Sync with Epic Games Store" onclick="handleSocialLogin('Epic Games')">
+                    <i class="fa-solid fa-cube"></i>
+                    <span>Epic Games</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Footer Notice -->
+        <footer class="login-footer">
+            <p>&copy; 2026 NOVAForge Gamer Command Center. Track playtimes, finished games & hardware news across all platforms.</p>
+        </footer>
+    </main>
+
+    <!-- Forgot Password Modal -->
+    <div class="modal-overlay" id="forgotModal">
+        <div class="glass-card modal-card">
+            <button class="modal-close" id="closeModalBtn">&times;</button>
+            <i class="fa-solid fa-key modal-icon"></i>
+            <h3>Recover Gamer Account</h3>
+            <p>Enter your registered gamer email to receive a passkey reset link.</p>
+            <div class="input-group">
+                <div class="input-wrapper">
+                    <i class="fa-solid fa-envelope input-icon"></i>
+                    <input type="email" id="resetEmail" placeholder="registered@domain.com">
+                </div>
+            </div>
+            <button class="btn btn-primary" id="sendResetBtn">Send Recovery Passkey</button>
+            <p class="modal-status" id="modalStatus"></p>
+        </div>
+    </div>
+
+    <!-- Alert / Toast Popup -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script src="js/script.js"></script>
+</body>
+</html>

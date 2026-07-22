@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="NOVAForge Gamer Command Center - Track your finished games, total playtimes, AI game recommendations, cross-platform accounts (Xbox, PlayStation, Steam, Epic Games), achievements, and NVIDIA hardware news.">
+    <title>NOVAForge | Gamer Command Center & Dashboard</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800;900&family=Rajdhani:wght@500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Landing Stylesheet -->
+    <link rel="stylesheet" href="css/landing.css">
+</head>
+<body class="loading">
+
+    <!-- Screen Preloader -->
+    <div class="preloader" id="preloader">
+        <div class="loader-content">
+            <img src="images/logo.png" alt="NOVAForge Logo" class="loader-logo">
+            <h2 class="loader-title">NOVA<span class="highlight">Forge</span></h2>
+            <div class="progress-bar-container">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+            <span class="progress-percent" id="progressPercent">0%</span>
+            <p class="loader-sub">SYNCING GAMER PROFILE & PLATFORMS...</p>
+        </div>
+    </div>
+
+    <!-- Mouse Glow Follower -->
+    <div class="cursor-glow" id="cursorGlow"></div>
+
+    <!-- Background Floating Gaming Icons -->
+    <div class="floating-icons-container">
+        <i class="fa-solid fa-gamepad floating-icon icon-1"></i>
+        <i class="fa-brands fa-playstation floating-icon icon-2"></i>
+        <i class="fa-brands fa-xbox floating-icon icon-3"></i>
+        <i class="fa-brands fa-steam floating-icon icon-4"></i>
+        <i class="fa-solid fa-trophy floating-icon icon-5"></i>
+        <i class="fa-solid fa-microchip floating-icon icon-6"></i>
+    </div>
+
+    <!-- Sticky Navigation Bar -->
+    <header class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="#hero" class="nav-logo">
+                <img src="images/logo.png" alt="NOVAForge Logo" class="nav-logo-img">
+                <span class="nav-logo-text">NOVA<span class="highlight">Forge</span></span>
+            </a>
+
+            <!-- Navigation Links -->
+            <nav class="nav-menu" id="navMenu">
+                <a href="#hero" class="nav-link active">Home</a>
+                <a href="#finished-games" class="nav-link">Finished Games</a>
+                <a href="#recommendations" class="nav-link">Next To Play</a>
+                <a href="#platforms" class="nav-link">Platforms</a>
+                <a href="#achievements" class="nav-link">Achievements</a>
+                <a href="#news" class="nav-link">News & NVIDIA</a>
+                <a href="#testimonials" class="nav-link">Squad</a>
+                <a href="#contact" class="nav-link">Contact</a>
+            </nav>
+
+            <!-- Gamer Header Status Badge & Mobile Toggle -->
+            <div class="nav-actions">
+                <div class="user-badge" id="userBadge">
+                    <i class="fa-solid fa-crown user-crown-icon"></i>
+                    <div class="user-text-box">
+                        <span id="headerUsername" class="user-name-str">CyberKnight_99</span>
+                        <span class="user-lvl-str">LVL 45 • PRO GAMER</span>
+                    </div>
+                </div>
+                <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle navigation menu">
+                    <i class="fa-solid fa-bars" id="toggleIcon"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- ================= HERO SECTION (COMMAND CENTER) ================= -->
+        <section id="hero" class="hero-section">
+            <div class="hero-bg-wrapper">
+                <div class="hero-bg-img" style="background-image: url('images/hero.jpg');"></div>
+                <div class="hero-overlay"></div>
+            </div>
+
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <span class="pulse-dot"></span> GAMER COMMAND CENTER ONLINE
+                </div>
+                <h1 class="hero-title">
+                    Welcome Back,<br>
+                    <span class="neon-gradient-text">Legendary Gamer</span>
+                </h1>
+                <p class="hero-subtext">
+                    <span class="typing-text" id="typingText"></span>
+                </p>
+
+                <!-- Live Gamer Quick Stats Ribbon -->
+                <div class="hero-stats-ribbon">
+                    <div class="ribbon-item">
+                        <i class="fa-solid fa-clock ribbon-icon cyan"></i>
+                        <div>
+                            <strong class="ribbon-val">1,480 hrs</strong>
+                            <span class="ribbon-lbl">Total Playtime</span>
+                        </div>
+                    </div>
+                    <div class="ribbon-divider"></div>
+                    <div class="ribbon-item">
+                        <i class="fa-solid fa-circle-check ribbon-icon purple"></i>
+                        <div>
+                            <strong class="ribbon-val">42 Titles</strong>
+                            <span class="ribbon-lbl">Finished Games</span>
+                        </div>
+                    </div>
+                    <div class="ribbon-divider"></div>
+                    <div class="ribbon-item">
+                        <i class="fa-solid fa-trophy ribbon-icon orange"></i>
+                        <div>
+                            <strong class="ribbon-val">1,250</strong>
+                            <span class="ribbon-lbl">Trophies Unlocked</span>
+                        </div>
+                    </div>
+                    <div class="ribbon-divider"></div>
+                    <div class="ribbon-item">
+                        <i class="fa-solid fa-fire ribbon-icon pink"></i>
+                        <div>
+                            <strong class="ribbon-val">#142</strong>
+                            <span class="ribbon-lbl">Global Rank</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="hero-buttons">
+                    <a href="#finished-games" class="btn btn-primary btn-glow ripple">
+                        <i class="fa-solid fa-gamepad"></i>
+                        <span>VIEW FINISHED GAMES</span>
+                    </a>
+                    <a href="#platforms" class="btn btn-secondary ripple">
+                        <i class="fa-solid fa-link"></i>
+                        <span>SYNC PLATFORM ACCOUNTS</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Scroll Down Indicator -->
+            <a href="#finished-games" class="scroll-down-btn" aria-label="Scroll to finished games">
+                <i class="fa-solid fa-chevron-down"></i>
+            </a>
+        </section>
+
+        <!-- ================= FINISHED GAMES & PLAYTIME SECTION ================= -->
+        <section id="finished-games" class="section-padding games-section">
+            <div class="section-container">
+                <div class="section-header text-center reveal-up">
+                    <span class="section-tag">COMPLETED TROPHIES & LOGS</span>
+                    <h2 class="section-title">Finished <span class="highlight">Games Library</span></h2>
+                    <p class="section-desc">Track your completed campaigns, total hours invested, completion rates, and platinum status.</p>
+                </div>
+
+                <div class="games-grid">
+                    <!-- Game Card 1 -->
+                    <div class="game-card reveal-up">
+                        <div class="game-cover-wrapper">
+                            <img src="images/game1.jpg" alt="Cyberpunk 2077" class="game-cover">
+                            <div class="game-overlay"></div>
+                            <span class="badge-status platinum"><i class="fa-solid fa-trophy"></i> 100% Platinum</span>
+                        </div>
+                        <div class="game-info">
+                            <div class="game-meta">
+                                <span class="game-genre"><i class="fa-solid fa-clock"></i> 140 Hours Played</span>
+                                <span class="game-year">Score: 10/10</span>
+                            </div>
+                            <h3 class="game-title">Cyberpunk 2077</h3>
+                            <p class="game-snippet">Completed all main endings, Phantom Liberty expansion, and unlocked every secret Night City iconic weapon.</p>
+                            <button class="btn-card-action" onclick="openFinishedGameModal('Cyberpunk 2077', 'images/game1.jpg', '140 Hours', '100% Platinum', 'Sci-Fi RPG', 'PC / Steam')">View Play Log <i class="fa-solid fa-arrow-right"></i></button>
+                        </div>
+                    </div>
+
+                    <!-- Game Card 2 -->
+                    <div class="game-card reveal-up" style="animation-delay: 0.1s;">
+                        <div class="game-cover-wrapper">
+                            <img src="images/game2.jpg" alt="Red Dead Redemption 2" class="game-cover">
+                            <div class="game-overlay"></div>
+                            <span class="badge-status gold"><i class="fa-solid fa-star"></i> 100% Mastered</span>
+                        </div>
+                        <div class="game-info">
+                            <div class="game-meta">
+                                <span class="game-genre"><i class="fa-solid fa-clock"></i> 210 Hours Played</span>
+                                <span class="game-year">Score: 10/10</span>
+                            </div>
+                            <h3 class="game-title">Red Dead Redemption 2</h3>
+                            <p class="game-snippet">Completed Arthur Morgan's saga, 100% compendium hunting, and full epilogue exploration.</p>
+                            <button class="btn-card-action" onclick="openFinishedGameModal('Red Dead Redemption 2', 'images/game2.jpg', '210 Hours', '100% Mastered', 'Action Western', 'PlayStation 5')">View Play Log <i class="fa-solid fa-arrow-right"></i></button>
+                        </div>
+                    </div>
+
+                    <!-- Game Card 3 -->
+                    <div class="game-card reveal-up" style="animation-delay: 0.2s;">
+                        <div class="game-cover-wrapper">
+                            <img src="images/game3.jpg" alt="Marvel's Spider-Man 2" class="game-cover">
+                            <div class="game-overlay"></div>
+                            <span class="badge-status platinum"><i class="fa-solid fa-trophy"></i> Platinum Trophy</span>
+                        </div>
+                        <div class="game-info">
+                            <div class="game-meta">
+                                <span class="game-genre"><i class="fa-solid fa-clock"></i> 60 Hours Played</span>
+                                <span class="game-year">Score: 9.5/10</span>
+                            </div>
+                            <h3 class="game-title">Marvel's Spider-Man 2</h3>
+                            <p class="game-snippet">Defeated Venom and Kraven, unlocked all Peter & Miles suits, and completed all district side quests.</p>
+                            <button class="btn-card-action" onclick="openFinishedGameModal('Marvel\'s Spider-Man 2', 'images/game3.jpg', '60 Hours', 'Platinum Trophy', 'Superhero Action', 'PlayStation 5')">View Play Log <i class="fa-solid fa-arrow-right"></i></button>
+                        </div>
+                    </div>
+
+                    <!-- Game Card 4 -->
+                    <div class="game-card reveal-up" style="animation-delay: 0.3s;">
+                        <div class="game-cover-wrapper">
+                            <img src="images/game4.jpg" alt="God of War Ragnarok" class="game-cover">
+                            <div class="game-overlay"></div>
+                            <span class="badge-status story"><i class="fa-solid fa-check-double"></i> Story Complete</span>
+                        </div>
+                        <div class="game-info">
+                            <div class="game-meta">
+                                <span class="game-genre"><i class="fa-solid fa-clock"></i> 85 Hours Played</span>
+                                <span class="game-year">Score: 10/10</span>
+                            </div>
+                            <h3 class="game-title">God of War Ragnarok</h3>
+                            <p class="game-snippet">Conquered the Nine Realms, defeated Gna the Valkyrie Queen, and completed the Valhalla DLC.</p>
+                            <button class="btn-card-action" onclick="openFinishedGameModal('God of War Ragnarok', 'images/game4.jpg', '85 Hours', 'Story Complete', 'Mythic Action', 'PlayStation 5')">View Play Log <i class="fa-solid fa-arrow-right"></i></button>
+                        </div>
+                    </div>
+
+                    <!-- Game Card 5 -->
+                    <div class="game-card reveal-up">
+                        <div class="game-cover-wrapper">
+                            <img src="images/game5.jpg" alt="Ghost of Tsushima" class="game-cover">
+                            <div class="game-overlay"></div>
+                            <span class="badge-status platinum"><i class="fa-solid fa-trophy"></i> 100% Platinum</span>
+                        </div>
+                        <div class="game-info">
+                            <div class="game-meta">
+                                <span class="game-genre"><i class="fa-solid fa-clock"></i> 95 Hours Played</span>
+                                <span class="game-year">Score: 9.8/10</span>
+                            </div>
+                            <h3 class="game-title">Ghost of Tsushima</h3>
+                            <p class="game-snippet">Liberated all territories of Tsushima and Iki Island with maxed Jin Sakai armor sets and sword kits.</p>
+                            <button class="btn-card-action" onclick="openFinishedGameModal('Ghost of Tsushima', 'images/game5.jpg', '95 Hours', '100% Platinum', 'Samurai Action', 'PC / Steam')">View Play Log <i class="fa-solid fa-arrow-right"></i></button>
+                        </div>
+                    </div>
+
+                    <!-- Game Card 6 -->
+                    <div class="game-card reveal-up" style="animation-delay: 0.1s;">
+                        <div class="game-cover-wrapper">
+                            <img src="images/game6.jpg" alt="The Last of Us Part II" class="game-cover">
+                            <div class="game-overlay"></div>
+                            <span class="badge-status story"><i class="fa-solid fa-check-double"></i> Story Complete</span>
+                        </div>
+                        <div class="game-info">
+                            <div class="game-meta">
+                                <span class="game-genre"><i class="fa-solid fa-clock"></i> 55 Hours Played</span>
+                                <span class="game-year">Score: 9.7/10</span>
+                            </div>
+                            <h3 class="game-title">The Last of Us Part II</h3>
+                            <p class="game-snippet">Finished Ellie & Abby campaigns on Survivor difficulty and conquered No Return roguelike mode.</p>
+                            <button class="btn-card-action" onclick="openFinishedGameModal('The Last of Us Part II', 'images/game6.jpg', '55 Hours', 'Story Complete', 'Survival Action', 'PlayStation 5')">View Play Log <i class="fa-solid fa-arrow-right"></i></button>
+                        </div>
+                    </div>
+
+                    <!-- Game Card 7 -->
+                    <div class="game-card reveal-up" style="animation-delay: 0.2s;">
+                        <div class="game-cover-wrapper">
+                            <img src="images/game7.jpg" alt="Resident Evil Requiem" class="game-cover">
+                            <div class="game-overlay"></div>
+                            <span class="badge-status gold"><i class="fa-solid fa-biohazard"></i> S-Rank Survivor</span>
+                        </div>
+                        <div class="game-info">
+                            <div class="game-meta">
+                                <span class="game-genre"><i class="fa-solid fa-clock"></i> 40 Hours Played</span>
+                                <span class="game-year">Score: 9.4/10</span>
+                            </div>
+                            <h3 class="game-title">Resident Evil Requiem</h3>
+                            <p class="game-snippet">Achieved S+ Professional rating with unlimited rocket launcher unlocked and zero healing items used.</p>
+                            <button class="btn-card-action" onclick="openFinishedGameModal('Resident Evil Requiem', 'images/game7.jpg', '40 Hours', 'S-Rank Survivor', 'Survival Horror', 'PC / Steam')">View Play Log <i class="fa-solid fa-arrow-right"></i></button>
+                        </div>
+                    </div>
+
+                    <!-- Game Card 8 -->
+                    <div class="game-card reveal-up" style="animation-delay: 0.3s;">
+                        <div class="game-cover-wrapper">
+                            <img src="images/game8.jpg" alt="007 First Light" class="game-cover">
+                            <div class="game-overlay"></div>
+                            <span class="badge-status platinum"><i class="fa-solid fa-user-ninja"></i> Agent 00 Level</span>
+                        </div>
+                        <div class="game-info">
+                            <div class="game-meta">
+                                <span class="game-genre"><i class="fa-solid fa-clock"></i> 35 Hours Played</span>
+                                <span class="game-year">Score: 9.6/10</span>
+                            </div>
+                            <h3 class="game-title">007 First Light</h3>
+                            <p class="game-snippet">Completed all covert espionage missions with Silent Assassin rating and stealth gadget upgrades.</p>
+                            <button class="btn-card-action" onclick="openFinishedGameModal('007 First Light', 'images/game8.jpg', '35 Hours', 'Agent 00 Level', 'Stealth Action', 'Xbox Series X')">View Play Log <i class="fa-solid fa-arrow-right"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= WHAT TO PLAY NEXT (RECOMMENDATION ENGINE) ================= -->
+        <section id="recommendations" class="section-padding recommendations-section">
+            <div class="section-container">
+                <div class="section-header text-center reveal-up">
+                    <span class="section-tag">AI ALGORITHM MATCHES</span>
+                    <h2 class="section-title">What To Play <span class="highlight">Next</span></h2>
+                    <p class="section-desc">Personalized game recommendations calculated based on your recently completed titles, favorite genres, and playstyles.</p>
+                </div>
+
+                <div class="recommendations-grid">
+                    <!-- Rec 1 -->
+                    <div class="rec-card reveal-up">
+                        <div class="rec-header">
+                            <span class="match-percentage"><i class="fa-solid fa-wand-magic-sparkles"></i> 98% MATCH</span>
+                            <span class="rec-based">Based on: God of War & Ghost of Tsushima</span>
+                        </div>
+                        <div class="rec-body">
+                            <div class="rec-thumb">
+                                <img src="images/game8.jpg" alt="Black Myth Wukong">
+                            </div>
+                            <div class="rec-details">
+                                <h3 class="rec-title">Black Myth Wukong</h3>
+                                <p class="rec-reason">Combines high-skill mythic melee combat, epic boss encounters, and breathtaking Unreal Engine 5 visuals matching your love for action RPGs.</p>
+                                <div class="rec-tags">
+                                    <span>Mythic Action</span>
+                                    <span>Single Player</span>
+                                    <span>High Challenge</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="rec-actions">
+                            <button class="btn-rec-btn primary" onclick="showToast('Black Myth Wukong Added to Play Backlog!', 'success')"><i class="fa-solid fa-plus"></i> Add to Backlog</button>
+                            <button class="btn-rec-btn secondary" onclick="openRecommendModal('Black Myth Wukong', '98%', 'God of War Ragnarok', 'Unreal Engine 5 Action RPG with mythical transformation mechanics.')"><i class="fa-solid fa-circle-info"></i> Match Details</button>
+                        </div>
+                    </div>
+
+                    <!-- Rec 2 -->
+                    <div class="rec-card reveal-up" style="animation-delay: 0.15s;">
+                        <div class="rec-header">
+                            <span class="match-percentage cyan"><i class="fa-solid fa-wand-magic-sparkles"></i> 96% MATCH</span>
+                            <span class="rec-based">Based on: Cyberpunk 2077</span>
+                        </div>
+                        <div class="rec-body">
+                            <div class="rec-thumb">
+                                <img src="images/hero.jpg" alt="Aether Shift 2099">
+                            </div>
+                            <div class="rec-details">
+                                <h3 class="rec-title">Aether Shift 2099</h3>
+                                <p class="rec-reason">An open-world futuristic cyberpunk shooter with heavy narrative choices, cyberware augmentations, and ray-traced neon environments.</p>
+                                <div class="rec-tags">
+                                    <span>Cyberpunk</span>
+                                    <span>Open World</span>
+                                    <span>Story Rich</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="rec-actions">
+                            <button class="btn-rec-btn primary" onclick="showToast('Aether Shift 2099 Added to Play Backlog!', 'success')"><i class="fa-solid fa-plus"></i> Add to Backlog</button>
+                            <button class="btn-rec-btn secondary" onclick="openRecommendModal('Aether Shift 2099', '96%', 'Cyberpunk 2077', 'Immersive futuristic RPG with branching storylines and custom weapon crafting.')"><i class="fa-solid fa-circle-info"></i> Match Details</button>
+                        </div>
+                    </div>
+
+                    <!-- Rec 3 -->
+                    <div class="rec-card reveal-up" style="animation-delay: 0.3s;">
+                        <div class="rec-header">
+                            <span class="match-percentage orange"><i class="fa-solid fa-wand-magic-sparkles"></i> 95% MATCH</span>
+                            <span class="rec-based">Based on: Resident Evil Requiem</span>
+                        </div>
+                        <div class="rec-body">
+                            <div class="rec-thumb">
+                                <img src="images/game7.jpg" alt="Silent Hill 2 Remake">
+                            </div>
+                            <div class="rec-details">
+                                <h3 class="rec-title">Silent Hill 2 Remake</h3>
+                                <p class="rec-reason">A masterpiece of psychological survival horror featuring dense fog dynamics, eerie puzzle-solving, and terrifying soundscapes.</p>
+                                <div class="rec-tags">
+                                    <span>Horror</span>
+                                    <span>Atmospheric</span>
+                                    <span>Puzzle</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="rec-actions">
+                            <button class="btn-rec-btn primary" onclick="showToast('Silent Hill 2 Remake Added to Play Backlog!', 'success')"><i class="fa-solid fa-plus"></i> Add to Backlog</button>
+                            <button class="btn-rec-btn secondary" onclick="openRecommendModal('Silent Hill 2 Remake', '95%', 'Resident Evil Requiem', 'Psychological thriller horror with overhauled third-person combat.')"><i class="fa-solid fa-circle-info"></i> Match Details</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= CONNECTED PLATFORMS HUB ================= -->
+        <section id="platforms" class="section-padding platforms-section">
+            <div class="section-container">
+                <div class="section-header text-center reveal-up">
+                    <span class="section-tag">CROSS-PLATFORM SYNC</span>
+                    <h2 class="section-title">Connected Gaming <span class="highlight">Platforms</span></h2>
+                    <p class="section-desc">Manage your linked accounts, sync cloud save data, achievements, and cross-play friend lists.</p>
+                </div>
+
+                <div class="platforms-grid">
+                    <!-- Steam Platform -->
+                    <div class="platform-card steam-card reveal-up">
+                        <div class="platform-header">
+                            <i class="fa-brands fa-steam platform-icon"></i>
+                            <span class="sync-badge active"><i class="fa-solid fa-circle-check"></i> SYNCED</span>
+                        </div>
+                        <h3 class="platform-name">Steam Account</h3>
+                        <p class="platform-user">CyberKnight_99 (ID: 7656119890)</p>
+                        <div class="platform-stats">
+                            <div><strong>140</strong><span>Games</span></div>
+                            <div><strong>1,120 hrs</strong><span>Playtime</span></div>
+                            <div><strong>LVL 72</strong><span>Steam Badge</span></div>
+                        </div>
+                        <button class="btn-platform-sync" onclick="syncPlatformModal('Steam')"><i class="fa-solid fa-rotate"></i> Sync Steam Library</button>
+                    </div>
+
+                    <!-- PlayStation Platform -->
+                    <div class="platform-card psn-card reveal-up" style="animation-delay: 0.1s;">
+                        <div class="platform-header">
+                            <i class="fa-brands fa-playstation platform-icon"></i>
+                            <span class="sync-badge active"><i class="fa-solid fa-circle-check"></i> SYNCED</span>
+                        </div>
+                        <h3 class="platform-name">PlayStation Network</h3>
+                        <p class="platform-user">PSN: Cyber_Shadow_99</p>
+                        <div class="platform-stats">
+                            <div><strong>58</strong><span>Games</span></div>
+                            <div><strong>18</strong><span>Platinums</span></div>
+                            <div><strong>LVL 340</strong><span>PSN Rank</span></div>
+                        </div>
+                        <button class="btn-platform-sync" onclick="syncPlatformModal('PlayStation')"><i class="fa-solid fa-rotate"></i> Sync PSN Trophies</button>
+                    </div>
+
+                    <!-- Xbox Platform -->
+                    <div class="platform-card xbox-card reveal-up" style="animation-delay: 0.2s;">
+                        <div class="platform-header">
+                            <i class="fa-brands fa-xbox platform-icon"></i>
+                            <span class="sync-badge active"><i class="fa-solid fa-circle-check"></i> SYNCED</span>
+                        </div>
+                        <h3 class="platform-name">Xbox Network</h3>
+                        <p class="platform-user">Gamertag: CyberForge99</p>
+                        <div class="platform-stats">
+                            <div><strong>82</strong><span>Games</span></div>
+                            <div><strong>45,200</strong><span>Gamerscore</span></div>
+                            <div><strong>Game Pass</strong><span>Ultimate</span></div>
+                        </div>
+                        <button class="btn-platform-sync" onclick="syncPlatformModal('Xbox')"><i class="fa-solid fa-rotate"></i> Sync Xbox Library</button>
+                    </div>
+
+                    <!-- Epic Games Platform -->
+                    <div class="platform-card epic-card reveal-up" style="animation-delay: 0.3s;">
+                        <div class="platform-header">
+                            <i class="fa-solid fa-cube platform-icon"></i>
+                            <span class="sync-badge active"><i class="fa-solid fa-circle-check"></i> SYNCED</span>
+                        </div>
+                        <h3 class="platform-name">Epic Games Store</h3>
+                        <p class="platform-user">EpicID: CyberKnight_99</p>
+                        <div class="platform-stats">
+                            <div><strong>65</strong><span>Games</span></div>
+                            <div><strong>120 hrs</strong><span>Playtime</span></div>
+                            <div><strong>Active</strong><span>Cloud Saves</span></div>
+                        </div>
+                        <button class="btn-platform-sync" onclick="syncPlatformModal('Epic Games')"><i class="fa-solid fa-rotate"></i> Sync Epic Store</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= STATS & ACHIEVEMENTS SECTION ================= -->
+        <section id="achievements" class="section-padding stats-section">
+            <div class="section-container">
+                <div class="section-header text-center reveal-up">
+                    <span class="section-tag">GLOBAL MILESTONES</span>
+                    <h2 class="section-title">Player Stats & <span class="highlight">Achievements</span></h2>
+                    <p class="section-desc">Your cross-platform lifetime gaming counters and unlocked hall of fame trophies.</p>
+                </div>
+
+                <!-- Stat Counters -->
+                <div class="stats-grid" style="margin-bottom: 4rem;">
+                    <div class="stat-card reveal-up">
+                        <i class="fa-solid fa-clock stat-icon"></i>
+                        <h3 class="stat-number" data-target="1480">0</h3>
+                        <span class="stat-suffix">hrs</span>
+                        <p class="stat-label">Total Playtime</p>
+                    </div>
+
+                    <div class="stat-card reveal-up" style="animation-delay: 0.1s;">
+                        <i class="fa-solid fa-gamepad stat-icon"></i>
+                        <h3 class="stat-number" data-target="42">0</h3>
+                        <span class="stat-plus">+</span>
+                        <p class="stat-label">Finished Games</p>
+                    </div>
+
+                    <div class="stat-card reveal-up" style="animation-delay: 0.2s;">
+                        <i class="fa-solid fa-trophy stat-icon"></i>
+                        <h3 class="stat-number" data-target="1250">0</h3>
+                        <span class="stat-plus">+</span>
+                        <p class="stat-label">Trophies Unlocked</p>
+                    </div>
+
+                    <div class="stat-card reveal-up" style="animation-delay: 0.3s;">
+                        <i class="fa-solid fa-chart-line stat-icon"></i>
+                        <h3 class="stat-number" data-target="98">0</h3>
+                        <span class="stat-suffix">%</span>
+                        <p class="stat-label">Completion Rate</p>
+                    </div>
+                </div>
+
+                <!-- Trophies Badges Grid -->
+                <div class="achievements-grid">
+                    <div class="achievement-card reveal-up">
+                        <div class="badge-icon glow-cyan">
+                            <i class="fa-solid fa-crosshairs"></i>
+                        </div>
+                        <span class="unlock-status"><i class="fa-solid fa-lock-open"></i> UNLOCKED</span>
+                        <h3 class="achievement-name">Legendary Hunter</h3>
+                        <p class="achievement-desc">Defeated 1,000 elite bosses across Cyberpunk 2077, Resident Evil, and God of War.</p>
+                    </div>
+
+                    <div class="achievement-card reveal-up" style="animation-delay: 0.1s;">
+                        <div class="badge-icon glow-purple">
+                            <i class="fa-solid fa-map-location-dot"></i>
+                        </div>
+                        <span class="unlock-status"><i class="fa-solid fa-lock-open"></i> UNLOCKED</span>
+                        <h3 class="achievement-name">Master Explorer</h3>
+                        <p class="achievement-desc">Achieved 100% map completion in Red Dead Redemption 2 and Ghost of Tsushima.</p>
+                    </div>
+
+                    <div class="achievement-card reveal-up" style="animation-delay: 0.2s;">
+                        <div class="badge-icon glow-orange">
+                            <i class="fa-solid fa-shield-heart"></i>
+                        </div>
+                        <span class="unlock-status"><i class="fa-solid fa-lock-open"></i> UNLOCKED</span>
+                        <h3 class="achievement-name">Ultimate Survivor</h3>
+                        <p class="achievement-desc">Completed The Last of Us Part II on Survivor difficulty without checkpoint retries.</p>
+                    </div>
+
+                    <div class="achievement-card reveal-up" style="animation-delay: 0.3s;">
+                        <div class="badge-icon glow-pink">
+                            <i class="fa-solid fa-crown"></i>
+                        </div>
+                        <span class="unlock-status"><i class="fa-solid fa-lock-open"></i> UNLOCKED</span>
+                        <h3 class="achievement-name">Champion</h3>
+                        <p class="achievement-desc">Ranked in the top 1% global leaderboard for cross-platform trophy collectors.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= GAMING & NVIDIA TECH NEWS ================= -->
+        <section id="news" class="section-padding news-section">
+            <div class="section-container">
+                <div class="section-header text-center reveal-up">
+                    <span class="section-tag">HARDWARE & INDUSTRY DISPATCH</span>
+                    <h2 class="section-title">Gaming & <span class="highlight">NVIDIA News</span></h2>
+                    <p class="section-desc">Stay ahead with the latest GPU technology leaks, NVIDIA DLSS updates, Steam sales, and platform announcements.</p>
+                </div>
+
+                <div class="news-grid">
+                    <!-- News 1: NVIDIA DLSS -->
+                    <div class="news-card reveal-up">
+                        <div class="news-img-wrapper">
+                            <img src="images/hero.jpg" alt="NVIDIA DLSS 4.0" class="news-img">
+                            <span class="news-tag nvidia-tag"><i class="fa-solid fa-microchip"></i> NVIDIA TECH</span>
+                        </div>
+                        <div class="news-content">
+                            <span class="news-date"><i class="fa-regular fa-calendar"></i> July 21, 2026</span>
+                            <h3 class="news-title">NVIDIA Unveils DLSS 4.0 & RTX 5090 Blackwell Architecture</h3>
+                            <p class="news-excerpt">NVIDIA announces neural frame generation 4.0 delivering 240FPS at native 4K path tracing across next-gen titles.</p>
+                            <button class="news-read-more" onclick="openNewsModal('NVIDIA Unveils DLSS 4.0 & RTX 5090 Blackwell Architecture')">Read Tech Dispatch <i class="fa-solid fa-arrow-right"></i></button>
+                        </div>
+                    </div>
+
+                    <!-- News 2: Steam Sale -->
+                    <div class="news-card reveal-up" style="animation-delay: 0.1s;">
+                        <div class="news-img-wrapper">
+                            <img src="images/game1.jpg" alt="Steam Summer Sale" class="news-img">
+                            <span class="news-tag steam-tag"><i class="fa-brands fa-steam"></i> STEAM DISPATCH</span>
+                        </div>
+                        <div class="news-content">
+                            <span class="news-date"><i class="fa-regular fa-calendar"></i> July 15, 2026</span>
+                            <h3 class="news-title">Steam Summer Mega Sale Live: Up to 90% Off Top AAA Games</h3>
+                            <p class="news-excerpt">Huge discounts on Cyberpunk 2077, God of War, Resident Evil, and 1,000+ indie masterpieces with bonus Steam points.</p>
+                            <button class="news-read-more" onclick="openNewsModal('Steam Summer Mega Sale Live')">Read Tech Dispatch <i class="fa-solid fa-arrow-right"></i></button>
+                        </div>
+                    </div>
+
+                    <!-- News 3: PS Plus & Xbox -->
+                    <div class="news-card reveal-up" style="animation-delay: 0.2s;">
+                        <div class="news-img-wrapper">
+                            <img src="images/game3.jpg" alt="PS Plus & Game Pass" class="news-img">
+                            <span class="news-tag platform-tag"><i class="fa-solid fa-gamepad"></i> PLATFORMS</span>
+                        </div>
+                        <div class="news-content">
+                            <span class="news-date"><i class="fa-regular fa-calendar"></i> July 02, 2026</span>
+                            <h3 class="news-title">PlayStation Plus Extra & Xbox Game Pass Monthly Lineup Unveiled</h3>
+                            <p class="news-excerpt">Day-one releases added to Game Pass Ultimate and PlayStation Plus Extra catalog including new co-op action RPGs.</p>
+                            <button class="news-read-more" onclick="openNewsModal('PlayStation Plus & Xbox Game Pass Monthly Lineup')">Read Tech Dispatch <i class="fa-solid fa-arrow-right"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= COMMUNITY & GAMER SQUAD ================= -->
+        <section id="testimonials" class="section-padding testimonials-section">
+            <div class="section-container">
+                <div class="section-header text-center reveal-up">
+                    <span class="section-tag">SQUAD & FRIENDS FEEDBACK</span>
+                    <h2 class="section-title">Gamer Community <span class="highlight">Reviews</span></h2>
+                    <p class="section-desc">What fellow competitive gamers and squad members say about the NOVAForge Command Center.</p>
+                </div>
+
+                <div class="testimonial-slider-container reveal-up">
+                    <div class="testimonial-track" id="testimonialTrack">
+                        <!-- Slide 1 -->
+                        <div class="testimonial-slide active">
+                            <div class="quote-icon"><i class="fa-solid fa-quote-left"></i></div>
+                            <p class="testimonial-text">"NOVAForge makes tracking finished games across my Steam, PSN, and Xbox accounts effortless. The AI 'What to Play Next' recommendation matched me with my new favorite RPG!"</p>
+                            <div class="critic-info">
+                                <div class="critic-avatar"><i class="fa-solid fa-gamepad"></i></div>
+                                <div>
+                                    <h4 class="critic-name">Viper_Radeon</h4>
+                                    <span class="critic-score">Level 84 Gamer • 2,100 Hours</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Slide 2 -->
+                        <div class="testimonial-slide">
+                            <div class="quote-icon"><i class="fa-solid fa-quote-left"></i></div>
+                            <p class="testimonial-text">"Having my platinum trophies, playtimes, and NVIDIA tech news aggregated in one beautiful neon dashboard is game-changing. Best gamer portal available."</p>
+                            <div class="critic-info">
+                                <div class="critic-avatar"><i class="fa-solid fa-bolt"></i></div>
+                                <div>
+                                    <h4 class="critic-name">NeonValkyrie</h4>
+                                    <span class="critic-score">PSN Platinum Collector • 34 Platinums</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Slide 3 -->
+                        <div class="testimonial-slide">
+                            <div class="quote-icon"><i class="fa-solid fa-quote-left"></i></div>
+                            <p class="testimonial-text">"The platform account sync is blazing fast. I can see my Xbox Gamerscore, Steam library, and GPU tech news in real-time."</p>
+                            <div class="critic-info">
+                                <div class="critic-avatar"><i class="fa-solid fa-microchip"></i></div>
+                                <div>
+                                    <h4 class="critic-name">Ghost_Overclock</h4>
+                                    <span class="critic-score">PC Rig Enthusiast • RTX 4090 Owner</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Slider Controls -->
+                    <div class="slider-dots" id="sliderDots">
+                        <button class="dot active" data-slide="0" aria-label="Go to slide 1"></button>
+                        <button class="dot" data-slide="1" aria-label="Go to slide 2"></button>
+                        <button class="dot" data-slide="2" aria-label="Go to slide 3"></button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= CONTACT & SQUAD INVITE FORM ================= -->
+        <section id="contact" class="section-padding contact-section">
+            <div class="section-container">
+                <div class="contact-card glass-card reveal-up">
+                    <div class="contact-header text-center">
+                        <span class="section-tag">JOIN THE GAMER SQUAD</span>
+                        <h2 class="section-title">Gamer Support & <span class="highlight">Invites</span></h2>
+                        <p class="section-desc">Need help syncing accounts, want to suggest a feature, or invite players to your co-op multiplayer squad?</p>
+                    </div>
+
+                    <form id="contactForm" class="contact-form" novalidate>
+                        <div class="form-row">
+                            <div class="input-group">
+                                <label for="contactName">GamerTag / Name</label>
+                                <div class="input-wrapper">
+                                    <i class="fa-solid fa-user input-icon"></i>
+                                    <input type="text" id="contactName" placeholder="Alex_Mercer" required>
+                                </div>
+                            </div>
+
+                            <div class="input-group">
+                                <label for="contactEmail">Gamer Email</label>
+                                <div class="input-wrapper">
+                                    <i class="fa-solid fa-envelope input-icon"></i>
+                                    <input type="email" id="contactEmail" placeholder="alex@domain.com" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="contactSubject">Subject</label>
+                            <div class="input-wrapper">
+                                <i class="fa-solid fa-gamepad input-icon"></i>
+                                <input type="text" id="contactSubject" placeholder="Platform Sync Help / Squad Recruit / Feature Suggestion" required>
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="contactMessage">Message</label>
+                            <div class="input-wrapper">
+                                <i class="fa-solid fa-comment-dots input-icon textarea-icon"></i>
+                                <textarea id="contactMessage" rows="5" placeholder="Share your message or gamer profile details..." required></textarea>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-glow btn-submit ripple" id="sendBtn">
+                            <span class="btn-text">TRANSMIT GAMER SIGNAL</span>
+                            <i class="fa-solid fa-paper-plane btn-icon"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ================= FOOTER ================= -->
+    <footer class="main-footer">
+        <div class="footer-container">
+            <div class="footer-grid">
+                <!-- Column 1: Gamer Portal Info -->
+                <div class="footer-col brand-col">
+                    <div class="footer-logo">
+                        <img src="images/logo.png" alt="NOVAForge Logo" class="footer-logo-img">
+                        <span class="footer-logo-text">NOVA<span class="highlight">Forge</span></span>
+                    </div>
+                    <p class="footer-about">The ultimate cross-platform gamer command center. Track your finished games, playtimes, AI recommendations, trophies, and hardware news.</p>
+                    <div class="social-links">
+                        <a href="#" class="social-icon discord" title="Discord"><i class="fa-brands fa-discord"></i></a>
+                        <a href="#" class="social-icon steam" title="Steam"><i class="fa-brands fa-steam"></i></a>
+                        <a href="#" class="social-icon psn" title="PlayStation"><i class="fa-brands fa-playstation"></i></a>
+                        <a href="#" class="social-icon xbox" title="Xbox"><i class="fa-brands fa-xbox"></i></a>
+                        <a href="#" class="social-icon twitter" title="X / Twitter"><i class="fa-brands fa-x-twitter"></i></a>
+                    </div>
+                </div>
+
+                <!-- Column 2: Quick Navigation -->
+                <div class="footer-col">
+                    <h4 class="footer-heading">Dashboard Links</h4>
+                    <ul class="footer-links">
+                        <li><a href="#hero">Command Center</a></li>
+                        <li><a href="#finished-games">Finished Games</a></li>
+                        <li><a href="#recommendations">Next To Play AI</a></li>
+                        <li><a href="#platforms">Platform Sync</a></li>
+                        <li><a href="#news">NVIDIA & Game News</a></li>
+                    </ul>
+                </div>
+
+                <!-- Column 3: Ecosystem -->
+                <div class="footer-col">
+                    <h4 class="footer-heading">Supported Platforms</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Steam Network</a></li>
+                        <li><a href="#">PlayStation Network</a></li>
+                        <li><a href="#">Xbox Network</a></li>
+                        <li><a href="#">Epic Games Store</a></li>
+                        <li><a href="#">NVIDIA GeForce NOW</a></li>
+                    </ul>
+                </div>
+
+                <!-- Column 4: Newsletter -->
+                <div class="footer-col">
+                    <h4 class="footer-heading">Join VIP Gamer Broadcast</h4>
+                    <p class="footer-sub-text">Receive game sale alerts, NVIDIA hardware leaks, and beta invites.</p>
+                    <form class="footer-newsletter" onsubmit="handleNewsletter(event)">
+                        <input type="email" placeholder="gamer@email.com" required>
+                        <button type="submit" aria-label="Subscribe to newsletter"><i class="fa-solid fa-chevron-right"></i></button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2026 NOVAForge Gamer Command Center. All Rights Reserved. Built for passion gamers.</p>
+                <div class="footer-legal">
+                    <a href="#">Gamer Terms</a>
+                    <a href="#">Privacy Statement</a>
+                    <a href="#">API Documentation</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button class="back-to-top" id="backToTopBtn" aria-label="Back to Top">
+        <i class="fa-solid fa-arrow-up"></i>
+    </button>
+
+    <!-- Modal Popup for Interactive Content -->
+    <div class="modal-overlay" id="interactiveModal">
+        <div class="glass-card modal-card-large">
+            <button class="modal-close" id="closeInteractiveModal" onclick="closeModal()" aria-label="Close Modal">&times;</button>
+            <div id="modalBody"></div>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script src="js/landing.js"></script>
+</body>
+</html>
