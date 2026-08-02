@@ -128,12 +128,66 @@ function initParticles() {
    ========================================================================== */
 function initCursorGlow() {
     const cursorGlow = document.getElementById('cursorGlow');
-    if (!cursorGlow) return;
+    const cursorDot = document.getElementById('cursorDot');
+    const cursorRing = document.getElementById('cursorRing');
+
+    if (!cursorGlow && !cursorDot && !cursorRing) return;
+
+    let mouseX = -100;
+    let mouseY = -100;
+    let ringX = -100;
+    let ringY = -100;
+    let isHovered = false;
 
     window.addEventListener('mousemove', (e) => {
-        cursorGlow.style.left = `${e.clientX}px`;
-        cursorGlow.style.top = `${e.clientY}px`;
-    });
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+    }, { passive: true });
+
+    function renderCursors() {
+        if (cursorDot) {
+            const dotScale = isHovered ? 1.5 : 1;
+            cursorDot.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0) translate(-50%, -50%) scale(${dotScale})`;
+        }
+
+        if (cursorGlow) {
+            cursorGlow.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0) translate(-50%, -50%)`;
+        }
+
+        if (cursorRing) {
+            ringX += (mouseX - ringX) * 0.25;
+            ringY += (mouseY - ringY) * 0.25;
+
+            const ringScale = isHovered ? 1.15 : 1;
+            const ringRotate = isHovered ? 'rotate(45deg)' : 'rotate(0deg)';
+            cursorRing.style.transform = `translate3d(${ringX}px, ${ringY}px, 0) translate(-50%, -50%) scale(${ringScale}) ${ringRotate}`;
+        }
+
+        requestAnimationFrame(renderCursors);
+    }
+    requestAnimationFrame(renderCursors);
+
+    const interactiveSelector = 'a, button, input, select, textarea, .glass-card, .social-btn, [role="button"]';
+    
+    document.addEventListener('mouseover', (e) => {
+        if (e.target && e.target.closest && e.target.closest(interactiveSelector)) {
+            if (!isHovered) {
+                isHovered = true;
+                if (cursorRing) cursorRing.classList.add('hovered');
+                if (cursorDot) cursorDot.classList.add('hovered');
+            }
+        }
+    }, { passive: true });
+
+    document.addEventListener('mouseout', (e) => {
+        if (e.target && e.target.closest && e.target.closest(interactiveSelector)) {
+            if (isHovered) {
+                isHovered = false;
+                if (cursorRing) cursorRing.classList.remove('hovered');
+                if (cursorDot) cursorDot.classList.remove('hovered');
+            }
+        }
+    }, { passive: true });
 }
 
 /* ==========================================================================

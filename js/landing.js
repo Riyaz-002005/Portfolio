@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initTestimonialsSlider();
     initContactForm();
     initBackToTop();
+    checkSuitClaimState();
 });
 
 /* ==========================================================================
@@ -177,12 +178,69 @@ function initTypingEffect() {
    ========================================================================== */
 function initCursorGlow() {
     const cursorGlow = document.getElementById('cursorGlow');
-    if (!cursorGlow) return;
+    const cursorDot = document.getElementById('cursorDot');
+    const cursorRing = document.getElementById('cursorRing');
+
+    if (!cursorGlow && !cursorDot && !cursorRing) return;
+
+    let mouseX = -100;
+    let mouseY = -100;
+    let ringX = -100;
+    let ringY = -100;
+    let isHovered = false;
 
     window.addEventListener('mousemove', (e) => {
-        cursorGlow.style.left = `${e.clientX}px`;
-        cursorGlow.style.top = `${e.clientY}px`;
-    });
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+    }, { passive: true });
+
+    function renderCursors() {
+        // High-performance GPU translate3d hardware composition
+        if (cursorDot) {
+            const dotScale = isHovered ? 1.5 : 1;
+            cursorDot.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0) translate(-50%, -50%) scale(${dotScale})`;
+        }
+
+        if (cursorGlow) {
+            cursorGlow.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0) translate(-50%, -50%)`;
+        }
+
+        if (cursorRing) {
+            // Smooth lerp calculation
+            ringX += (mouseX - ringX) * 0.25;
+            ringY += (mouseY - ringY) * 0.25;
+
+            const ringScale = isHovered ? 1.15 : 1;
+            const ringRotate = isHovered ? 'rotate(45deg)' : 'rotate(0deg)';
+            cursorRing.style.transform = `translate3d(${ringX}px, ${ringY}px, 0) translate(-50%, -50%) scale(${ringScale}) ${ringRotate}`;
+        }
+
+        requestAnimationFrame(renderCursors);
+    }
+    requestAnimationFrame(renderCursors);
+
+    // Optimized event delegation for hover states
+    const interactiveSelector = 'a, button, input, select, textarea, .game-card, .btn-claim-suit, .badge-suit-claim, .nav-link, .social-btn, [role="button"]';
+    
+    document.addEventListener('mouseover', (e) => {
+        if (e.target && e.target.closest && e.target.closest(interactiveSelector)) {
+            if (!isHovered) {
+                isHovered = true;
+                if (cursorRing) cursorRing.classList.add('hovered');
+                if (cursorDot) cursorDot.classList.add('hovered');
+            }
+        }
+    }, { passive: true });
+
+    document.addEventListener('mouseout', (e) => {
+        if (e.target && e.target.closest && e.target.closest(interactiveSelector)) {
+            if (isHovered) {
+                isHovered = false;
+                if (cursorRing) cursorRing.classList.remove('hovered');
+                if (cursorDot) cursorDot.classList.remove('hovered');
+            }
+        }
+    }, { passive: true });
 }
 
 /* ==========================================================================
@@ -250,6 +308,29 @@ function openFinishedGameModal(title, image, hours, status, genre, platform) {
     const modalBody = document.getElementById('modalBody');
     if (!modal || !modalBody) return;
 
+    const isSpiderMan = title.toLowerCase().includes('spider-man');
+    const isSuitClaimed = localStorage.getItem('novaforge_spiderman_suit_claimed') === 'true';
+
+    let suitRewardHTML = '';
+    if (isSpiderMan) {
+        suitRewardHTML = `
+            <div style="background: linear-gradient(135deg, rgba(255,43,61,0.12), rgba(255,140,0,0.08)); border: 1px solid rgba(255,43,61,0.35); padding: 1rem 1.2rem; border-radius: 12px; margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap;">
+                <div>
+                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.2rem;">
+                        <span style="background: rgba(255,43,61,0.2); color: #ff2b3d; font-family: var(--font-subheading); font-weight: 800; padding: 0.2rem 0.6rem; border-radius: 4px; font-size: 0.7rem; text-transform: uppercase;">
+                            <i class="fa-solid fa-gift"></i> BONUS IN-GAME SUIT
+                        </span>
+                        <strong style="color: #fff; font-family: var(--font-heading); font-size: 0.95rem;">Brand New Day Suit</strong>
+                    </div>
+                    <p style="color: var(--text-muted); font-size: 0.82rem; margin: 0;">Peter Parker Comic Suit with Electro-Web Burst & Nano wings</p>
+                </div>
+                <button class="${isSuitClaimed ? 'btn-claim-suit claimed' : 'btn-claim-suit'}" onclick="openSuitClaimModal(event)" style="flex-shrink: 0;">
+                    <i class="${isSuitClaimed ? 'fa-solid fa-circle-check' : 'fa-solid fa-gift'}"></i> ${isSuitClaimed ? 'Suit Unlocked' : 'Claim Suit'}
+                </button>
+            </div>
+        `;
+    }
+
     modalBody.innerHTML = `
         <div class="game-modal-content">
             <div style="position: relative; height: 280px; border-radius: 16px; overflow: hidden; margin-bottom: 1.5rem; border: 1px solid rgba(255,255,255,0.15);">
@@ -276,15 +357,20 @@ function openFinishedGameModal(title, image, hours, status, genre, platform) {
                 </div>
             </div>
 
+            ${suitRewardHTML}
+
             <h4 style="font-family: var(--font-heading); font-size: 1.1rem; margin-bottom: 0.6rem; color: var(--neon-orange);">GAMER COMPLETION LOG & NOTES</h4>
             <p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 1.8rem; font-size: 0.95rem;">
                 Campaign completed with 100% achievement collection. All main storyline arcs, secret bosses, and expansion packs fully mastered. Synced live with your cloud gaming account.
             </p>
 
-            <div style="display: flex; gap: 1rem;">
+            <div style="display: flex; gap: 0.8rem; flex-wrap: wrap;">
                 <button class="btn btn-primary btn-glow" style="flex: 1;" onclick="showToast('Replay Session Started on ${platform}', 'success')">
                     <i class="fa-solid fa-play"></i> RE-LAUNCH GAME
                 </button>
+                <a href="feedback.html?game=${encodeURIComponent(title)}" class="btn btn-primary" style="flex: 1; text-align: center; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 0.4rem; background: linear-gradient(135deg, var(--neon-purple), var(--neon-pink)); border: none;">
+                    <i class="fa-solid fa-comment-dots"></i> GIVE FEEDBACK
+                </a>
                 <button class="btn btn-secondary" style="flex: 1;" onclick="closeModal()">
                     <i class="fa-solid fa-xmark"></i> CLOSE LOG
                 </button>
@@ -583,4 +669,172 @@ function showToast(message, type = 'success') {
         toast.style.transition = 'all 0.4s ease';
         setTimeout(() => toast.remove(), 400);
     }, 3500);
+}
+
+/* ==========================================================================
+   18. Spider-Man Brand New Day Suit Claim Feature
+   ========================================================================== */
+function checkSuitClaimState() {
+    const isClaimed = localStorage.getItem('novaforge_spiderman_suit_claimed') === 'true';
+    updateSuitClaimUI(isClaimed);
+}
+
+function updateSuitClaimUI(isClaimed) {
+    const badge = document.getElementById('spiderSuitBadge');
+    const badgeText = document.getElementById('spiderBadgeText');
+    const box = document.getElementById('spiderSuitCardBox');
+    const btn = document.getElementById('spiderSuitBtn');
+    const btnText = document.getElementById('spiderSuitBtnText');
+
+    if (!badge || !box || !btn) return;
+
+    if (isClaimed) {
+        badge.classList.add('claimed');
+        if (badgeText) badgeText.textContent = 'Suit Unlocked';
+        box.classList.add('claimed-box');
+        btn.classList.add('claimed');
+        if (btnText) btnText.textContent = 'Suit Claimed';
+    } else {
+        badge.classList.remove('claimed');
+        if (badgeText) badgeText.textContent = 'Exclusive Suit';
+        box.classList.remove('claimed-box');
+        btn.classList.remove('claimed');
+        if (btnText) btnText.textContent = 'Claim Suit';
+    }
+}
+
+function openSuitClaimModal(e) {
+    if (e && e.stopPropagation) e.stopPropagation();
+
+    const modal = document.getElementById('interactiveModal');
+    const modalBody = document.getElementById('modalBody');
+    if (!modal || !modalBody) return;
+
+    const isClaimed = localStorage.getItem('novaforge_spiderman_suit_claimed') === 'true';
+
+    modalBody.innerHTML = `
+        <div class="suit-modal-content">
+            <div class="suit-modal-banner">
+                <div class="suit-hero-visual">
+                    <i class="fa-solid fa-spider suit-spider-logo"></i>
+                    <img src="images/game3.jpg" alt="Spider-Man Brand New Day Suit" style="width: 100%; height: 100%; object-fit: cover; opacity: 0.55; filter: contrast(1.1) saturate(1.2);">
+                    <div style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(255,43,61,0.2) 0%, rgba(7,8,14,0.92) 100%);"></div>
+                    <div style="position: absolute; top: 1rem; right: 1rem;">
+                        <span style="background: rgba(255, 43, 61, 0.9); color: #fff; font-family: var(--font-subheading); font-weight: 800; padding: 0.35rem 0.85rem; border-radius: 20px; font-size: 0.78rem; letter-spacing: 1px;">
+                            <i class="fa-solid fa-crown"></i> MYTHIC SUIT REWARD
+                        </span>
+                    </div>
+                    <div style="position: absolute; bottom: 1.2rem; left: 1.5rem; right: 1.5rem;">
+                        <span style="color: var(--neon-orange); font-family: var(--font-subheading); font-weight: 800; font-size: 0.82rem; letter-spacing: 1.5px;">MARVEL'S SPIDER-MAN 2 • PETER PARKER</span>
+                        <h2 style="font-family: var(--font-heading); font-size: 2.1rem; color: #fff; margin-top: 0.2rem; text-shadow: 0 0 15px rgba(255,43,61,0.6);">
+                            Brand New Day Suit
+                        </h2>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Suit Specifications Grid -->
+            <div class="suit-stats-grid">
+                <div class="suit-stat-card">
+                    <span style="color: var(--text-muted); font-size: 0.75rem; display: block; font-family: var(--font-subheading);">WEB SURGE BOOST</span>
+                    <strong style="color: var(--neon-orange); font-family: var(--font-subheading); font-size: 1.2rem;">+25% DMG</strong>
+                </div>
+                <div class="suit-stat-card">
+                    <span style="color: var(--text-muted); font-size: 0.75rem; display: block; font-family: var(--font-subheading);">AERIAL AGILITY</span>
+                    <strong style="color: var(--neon-blue); font-family: var(--font-subheading); font-size: 1.2rem;">MAX SPEED</strong>
+                </div>
+                <div class="suit-stat-card">
+                    <span style="color: var(--text-muted); font-size: 0.75rem; display: block; font-family: var(--font-subheading);">SPECIAL FINISHER</span>
+                    <strong style="color: var(--neon-purple); font-family: var(--font-subheading); font-size: 1.2rem;">NEON BURST</strong>
+                </div>
+            </div>
+
+            <!-- Suit Overview -->
+            <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08); padding: 1.2rem; border-radius: 12px; margin-bottom: 1.5rem;">
+                <h4 style="font-family: var(--font-heading); font-size: 1.05rem; color: var(--neon-orange); margin-bottom: 0.6rem;">
+                    <i class="fa-solid fa-shield-halved"></i> SUIT LORE & CAPABILITIES
+                </h4>
+                <p style="color: var(--text-secondary); line-height: 1.6; font-size: 0.92rem; margin-bottom: 1rem;">
+                    Inspired by the iconic Brand New Day comic storyline, this exclusive suit brings Peter Parker's classic red-and-blue aesthetic into high-tech action. Equipped with gold-accented web-wing gliders, reinforced nano-weave armor, and custom finisher animations in Marvel's Spider-Man 2.
+                </p>
+                <div style="display: flex; gap: 0.6rem; flex-wrap: wrap;">
+                    <span class="suit-perk-tag"><i class="fa-solid fa-bolt"></i> Electro-Web Conduits</span>
+                    <span class="suit-perk-tag"><i class="fa-solid fa-feather-pointed"></i> Nano-Glide Wings</span>
+                    <span class="suit-perk-tag"><i class="fa-solid fa-sparkles"></i> Golden Emblem FX</span>
+                </div>
+            </div>
+
+            <!-- Sync & Claim Action Box -->
+            <div id="suitModalActionArea">
+                ${isClaimed ? `
+                    <div style="background: rgba(0, 230, 118, 0.1); border: 1px solid rgba(0, 230, 118, 0.4); padding: 1rem; border-radius: 12px; text-align: center; margin-bottom: 1.2rem;">
+                        <i class="fa-solid fa-circle-check" style="font-size: 2.2rem; color: #00e676; margin-bottom: 0.5rem;"></i>
+                        <h4 style="color: #fff; font-family: var(--font-heading); font-size: 1.1rem; margin-bottom: 0.3rem;">SUIT UNLOCKED & SYNCED</h4>
+                        <p style="color: var(--text-secondary); font-size: 0.88rem; margin: 0;">The Brand New Day Suit is active in your PlayStation Network inventory for Marvel's Spider-Man 2.</p>
+                    </div>
+                    <div style="display: flex; gap: 1rem;">
+                        <button class="btn btn-secondary" style="flex: 1;" onclick="claimBrandNewDaySuit(false)">
+                            <i class="fa-solid fa-rotate-left"></i> RE-SYNC LICENSE
+                        </button>
+                        <button class="btn btn-secondary" style="flex: 1;" onclick="closeModal()">
+                            <i class="fa-solid fa-xmark"></i> CLOSE PREVIEW
+                        </button>
+                    </div>
+                ` : `
+                    <div style="background: rgba(255, 43, 61, 0.08); border: 1px solid rgba(255, 43, 61, 0.3); padding: 1rem; border-radius: 12px; margin-bottom: 1.2rem; display: flex; align-items: center; justify-content: space-between;">
+                        <div>
+                            <span style="color: var(--text-muted); font-size: 0.78rem; display: block;">TARGET ACCOUNT</span>
+                            <strong style="color: var(--neon-blue); font-family: var(--font-subheading); font-size: 1rem;"><i class="fa-brands fa-playstation"></i> CyberKnight_99 (PSN)</strong>
+                        </div>
+                        <span style="background: rgba(0,240,255,0.1); color: var(--neon-blue); font-family: var(--font-subheading); font-weight: 800; padding: 0.3rem 0.7rem; border-radius: 6px; font-size: 0.78rem;">FREE CLAIM</span>
+                    </div>
+                    <button class="btn btn-primary btn-glow" style="width: 100%; padding: 0.9rem;" onclick="claimBrandNewDaySuit(true)">
+                        <i class="fa-solid fa-gift"></i> CLAIM SUIT TO PSN ACCOUNT NOW
+                    </button>
+                `}
+            </div>
+        </div>
+    `;
+
+    modal.classList.add('active');
+}
+
+function claimBrandNewDaySuit(shouldClaim = true) {
+    const actionArea = document.getElementById('suitModalActionArea');
+    if (actionArea) {
+        actionArea.innerHTML = `
+            <div style="text-center; padding: 1.5rem 0;">
+                <i class="fa-solid fa-arrows-rotate fa-spin" style="font-size: 2.5rem; color: var(--neon-orange); margin-bottom: 1rem;"></i>
+                <h4 style="color: #fff; font-family: var(--font-heading); margin-bottom: 0.4rem;">Authorizing Suit License...</h4>
+                <p style="color: var(--text-secondary); font-size: 0.88rem;">Transmitting Brand New Day Suit to Marvel's Spider-Man 2 Cloud Save...</p>
+            </div>
+        `;
+    }
+
+    setTimeout(() => {
+        localStorage.setItem('novaforge_spiderman_suit_claimed', 'true');
+        updateSuitClaimUI(true);
+
+        if (actionArea) {
+            actionArea.innerHTML = `
+                <div style="background: rgba(0, 230, 118, 0.12); border: 1px solid rgba(0, 230, 118, 0.5); padding: 1.2rem; border-radius: 12px; text-align: center; margin-bottom: 1.2rem; animation: pulse 0.5s ease;">
+                    <i class="fa-solid fa-circle-check" style="font-size: 2.8rem; color: #00e676; margin-bottom: 0.6rem;"></i>
+                    <h3 style="color: #fff; font-family: var(--font-heading); font-size: 1.3rem; margin-bottom: 0.3rem;">SUIT SUCCESSFULLY CLAIMED!</h3>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 0.8rem;">
+                        Brand New Day Suit is now unlocked in Marvel's Spider-Man 2 on PlayStation 5.
+                    </p>
+                    <span style="background: rgba(0,230,118,0.2); color: #00e676; font-family: var(--font-subheading); font-weight: 800; padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.78rem;">
+                        <i class="fa-solid fa-check"></i> PSN License Transferred
+                    </span>
+                </div>
+                <button class="btn btn-primary" style="width: 100%;" onclick="closeModal()">
+                    <i class="fa-solid fa-check"></i> RETURN TO COMMAND CENTER
+                </button>
+            `;
+        }
+
+        if (typeof showToast === 'function') {
+            showToast('Spider-Man Brand New Day Suit claimed to your PlayStation Network account!', 'success');
+        }
+    }, 1200);
 }

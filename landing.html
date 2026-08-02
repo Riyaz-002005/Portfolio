@@ -29,8 +29,10 @@
         </div>
     </div>
 
-    <!-- Mouse Glow Follower -->
+    <!-- Mouse Glow & Custom Gaming Cursor Follower -->
     <div class="cursor-glow" id="cursorGlow"></div>
+    <div class="custom-cursor-dot" id="cursorDot"></div>
+    <div class="custom-cursor-ring" id="cursorRing"></div>
 
     <!-- Background Floating Gaming Icons -->
     <div class="floating-icons-container">
@@ -175,7 +177,10 @@
                             </div>
                             <h3 class="game-title">Cyberpunk 2077</h3>
                             <p class="game-snippet">Completed all main endings, Phantom Liberty expansion, and unlocked every secret Night City iconic weapon.</p>
-                            <button class="btn-card-action" onclick="openFinishedGameModal('Cyberpunk 2077', 'images/game1.jpg', '140 Hours', '100% Platinum', 'Sci-Fi RPG', 'PC / Steam')">View Play Log <i class="fa-solid fa-arrow-right"></i></button>
+                            <div class="card-btn-row">
+                                <button class="btn-card-action" onclick="openFinishedGameModal('Cyberpunk 2077', 'images/game1.jpg', '140 Hours', '100% Platinum', 'Sci-Fi RPG', 'PC / Steam')">View Play Log <i class="fa-solid fa-arrow-right"></i></button>
+                                <a href="feedback.html?game=Cyberpunk%202077" class="btn-card-feedback" title="Give Game Completion Feedback"><i class="fa-solid fa-comment-dots"></i> Feedback</a>
+                            </div>
                         </div>
                     </div>
 
@@ -193,16 +198,20 @@
                             </div>
                             <h3 class="game-title">Red Dead Redemption 2</h3>
                             <p class="game-snippet">Completed Arthur Morgan's saga, 100% compendium hunting, and full epilogue exploration.</p>
-                            <button class="btn-card-action" onclick="openFinishedGameModal('Red Dead Redemption 2', 'images/game2.jpg', '210 Hours', '100% Mastered', 'Action Western', 'PlayStation 5')">View Play Log <i class="fa-solid fa-arrow-right"></i></button>
+                            <div class="card-btn-row">
+                                <button class="btn-card-action" onclick="openFinishedGameModal('Red Dead Redemption 2', 'images/game2.jpg', '210 Hours', '100% Mastered', 'Action Western', 'PlayStation 5')">View Play Log <i class="fa-solid fa-arrow-right"></i></button>
+                                <a href="feedback.html?game=Red%20Dead%20Redemption%202" class="btn-card-feedback" title="Give Game Completion Feedback"><i class="fa-solid fa-comment-dots"></i> Feedback</a>
+                            </div>
                         </div>
                     </div>
 
                     <!-- Game Card 3 -->
-                    <div class="game-card reveal-up" style="animation-delay: 0.2s;">
+                    <div class="game-card reveal-up" style="animation-delay: 0.2s;" id="spidermanGameCard">
                         <div class="game-cover-wrapper">
                             <img src="images/game3.jpg" alt="Marvel's Spider-Man 2" class="game-cover">
                             <div class="game-overlay"></div>
                             <span class="badge-status platinum"><i class="fa-solid fa-trophy"></i> Platinum Trophy</span>
+                            <span class="badge-suit-claim" id="spiderSuitBadge" onclick="openSuitClaimModal()" title="Claim Brand New Day Suit"><i class="fa-solid fa-mask"></i> <span id="spiderBadgeText">Exclusive Suit</span></span>
                         </div>
                         <div class="game-info">
                             <div class="game-meta">
@@ -211,7 +220,22 @@
                             </div>
                             <h3 class="game-title">Marvel's Spider-Man 2</h3>
                             <p class="game-snippet">Defeated Venom and Kraven, unlocked all Peter & Miles suits, and completed all district side quests.</p>
-                            <button class="btn-card-action" onclick="openFinishedGameModal('Marvel\'s Spider-Man 2', 'images/game3.jpg', '60 Hours', 'Platinum Trophy', 'Superhero Action', 'PlayStation 5')">View Play Log <i class="fa-solid fa-arrow-right"></i></button>
+                            
+                            <!-- Brand New Day Suit Claim Widget -->
+                            <div class="suit-claim-box" id="spiderSuitCardBox">
+                                <div class="suit-claim-details">
+                                    <span class="suit-badge-tag"><i class="fa-solid fa-bolt"></i> BONUS REWARD</span>
+                                    <h4 class="suit-title">Brand New Day Suit</h4>
+                                </div>
+                                <button class="btn-claim-suit" id="spiderSuitBtn" onclick="openSuitClaimModal()">
+                                    <i class="fa-solid fa-gift"></i> <span id="spiderSuitBtnText">Claim Suit</span>
+                                </button>
+                            </div>
+
+                            <div class="card-btn-row">
+                                <button class="btn-card-action" onclick="openFinishedGameModal('Marvel\'s Spider-Man 2', 'images/game3.jpg', '60 Hours', 'Platinum Trophy', 'Superhero Action', 'PlayStation 5')">View Play Log <i class="fa-solid fa-arrow-right"></i></button>
+                                <a href="feedback.html?game=Marvel%27s%20Spider-Man%202" class="btn-card-feedback" title="Give Game Completion Feedback"><i class="fa-solid fa-comment-dots"></i> Feedback</a>
+                            </div>
                         </div>
                     </div>
 
@@ -229,7 +253,10 @@
                             </div>
                             <h3 class="game-title">God of War Ragnarok</h3>
                             <p class="game-snippet">Conquered the Nine Realms, defeated Gna the Valkyrie Queen, and completed the Valhalla DLC.</p>
-                            <button class="btn-card-action" onclick="openFinishedGameModal('God of War Ragnarok', 'images/game4.jpg', '85 Hours', 'Story Complete', 'Mythic Action', 'PlayStation 5')">View Play Log <i class="fa-solid fa-arrow-right"></i></button>
+                            <div class="card-btn-row">
+                                <button class="btn-card-action" onclick="openFinishedGameModal('God of War Ragnarok', 'images/game4.jpg', '85 Hours', 'Story Complete', 'Mythic Action', 'PlayStation 5')">View Play Log <i class="fa-solid fa-arrow-right"></i></button>
+                                <a href="feedback.html?game=God%20of%20War%20Ragnarok" class="btn-card-feedback" title="Give Game Completion Feedback"><i class="fa-solid fa-comment-dots"></i> Feedback</a>
+                            </div>
                         </div>
                     </div>
 
@@ -247,7 +274,10 @@
                             </div>
                             <h3 class="game-title">Ghost of Tsushima</h3>
                             <p class="game-snippet">Liberated all territories of Tsushima and Iki Island with maxed Jin Sakai armor sets and sword kits.</p>
-                            <button class="btn-card-action" onclick="openFinishedGameModal('Ghost of Tsushima', 'images/game5.jpg', '95 Hours', '100% Platinum', 'Samurai Action', 'PC / Steam')">View Play Log <i class="fa-solid fa-arrow-right"></i></button>
+                            <div class="card-btn-row">
+                                <button class="btn-card-action" onclick="openFinishedGameModal('Ghost of Tsushima', 'images/game5.jpg', '95 Hours', '100% Platinum', 'Samurai Action', 'PC / Steam')">View Play Log <i class="fa-solid fa-arrow-right"></i></button>
+                                <a href="feedback.html?game=Ghost%20of%20Tsushima" class="btn-card-feedback" title="Give Game Completion Feedback"><i class="fa-solid fa-comment-dots"></i> Feedback</a>
+                            </div>
                         </div>
                     </div>
 
@@ -265,7 +295,10 @@
                             </div>
                             <h3 class="game-title">The Last of Us Part II</h3>
                             <p class="game-snippet">Finished Ellie & Abby campaigns on Survivor difficulty and conquered No Return roguelike mode.</p>
-                            <button class="btn-card-action" onclick="openFinishedGameModal('The Last of Us Part II', 'images/game6.jpg', '55 Hours', 'Story Complete', 'Survival Action', 'PlayStation 5')">View Play Log <i class="fa-solid fa-arrow-right"></i></button>
+                            <div class="card-btn-row">
+                                <button class="btn-card-action" onclick="openFinishedGameModal('The Last of Us Part II', 'images/game6.jpg', '55 Hours', 'Story Complete', 'Survival Action', 'PlayStation 5')">View Play Log <i class="fa-solid fa-arrow-right"></i></button>
+                                <a href="feedback.html?game=The%20Last%20of%20Us%20Part%20II" class="btn-card-feedback" title="Give Game Completion Feedback"><i class="fa-solid fa-comment-dots"></i> Feedback</a>
+                            </div>
                         </div>
                     </div>
 
@@ -283,7 +316,10 @@
                             </div>
                             <h3 class="game-title">Resident Evil Requiem</h3>
                             <p class="game-snippet">Achieved S+ Professional rating with unlimited rocket launcher unlocked and zero healing items used.</p>
-                            <button class="btn-card-action" onclick="openFinishedGameModal('Resident Evil Requiem', 'images/game7.jpg', '40 Hours', 'S-Rank Survivor', 'Survival Horror', 'PC / Steam')">View Play Log <i class="fa-solid fa-arrow-right"></i></button>
+                            <div class="card-btn-row">
+                                <button class="btn-card-action" onclick="openFinishedGameModal('Resident Evil Requiem', 'images/game7.jpg', '40 Hours', 'S-Rank Survivor', 'Survival Horror', 'PC / Steam')">View Play Log <i class="fa-solid fa-arrow-right"></i></button>
+                                <a href="feedback.html?game=Resident%20Evil%20Requiem" class="btn-card-feedback" title="Give Game Completion Feedback"><i class="fa-solid fa-comment-dots"></i> Feedback</a>
+                            </div>
                         </div>
                     </div>
 
@@ -301,7 +337,10 @@
                             </div>
                             <h3 class="game-title">007 First Light</h3>
                             <p class="game-snippet">Completed all covert espionage missions with Silent Assassin rating and stealth gadget upgrades.</p>
-                            <button class="btn-card-action" onclick="openFinishedGameModal('007 First Light', 'images/game8.jpg', '35 Hours', 'Agent 00 Level', 'Stealth Action', 'Xbox Series X')">View Play Log <i class="fa-solid fa-arrow-right"></i></button>
+                            <div class="card-btn-row">
+                                <button class="btn-card-action" onclick="openFinishedGameModal('007 First Light', 'images/game8.jpg', '35 Hours', 'Agent 00 Level', 'Stealth Action', 'Xbox Series X')">View Play Log <i class="fa-solid fa-arrow-right"></i></button>
+                                <a href="feedback.html?game=007%20First%20Light" class="btn-card-feedback" title="Give Game Completion Feedback"><i class="fa-solid fa-comment-dots"></i> Feedback</a>
+                            </div>
                         </div>
                     </div>
                 </div>

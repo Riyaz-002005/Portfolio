@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="NOVAForge Gamer Completion Feedback - Submit verified game reviews, rate story, combat, and gameplay mechanics, and sync completion logs with your cloud gaming profile.">
+    <title>NOVAForge | Gamer Completion Feedback Portal</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800;900&family=Rajdhani:wght@500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Landing Stylesheet -->
+    <link rel="stylesheet" href="css/landing.css">
+    <style>
+        /* Feedback Page Specific Styling */
+        .feedback-hero {
+            padding: 9rem 0 3rem 0;
+            position: relative;
+        }
+
+        .feedback-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2.5rem;
+            align-items: start;
+        }
+
+        .form-card {
+            background: var(--color-surface);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 2.2rem;
+            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(20px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+        }
+
+        .form-group {
+            margin-bottom: 1.4rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-family: var(--font-subheading);
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            letter-spacing: 0.5px;
+        }
+
+        .input-icon-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-icon-wrapper i.field-icon {
+            position: absolute;
+            left: 1.1rem;
+            color: var(--neon-blue);
+            font-size: 1rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.9rem 1.1rem 0.9rem 2.8rem;
+            background: rgba(8, 10, 18, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-family: var(--font-body);
+            font-size: 0.95rem;
+            outline: none;
+            transition: var(--transition-fast);
+        }
+
+        .form-control:focus {
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
+            background: rgba(15, 20, 35, 0.9);
+        }
+
+        .form-control.is-invalid {
+            border-color: #ff2b3d !important;
+            box-shadow: 0 0 18px rgba(255, 43, 61, 0.4) !important;
+        }
+
+        select.form-control option {
+            background: #0f121e;
+            color: #ffffff;
+        }
+
+        /* Star Rating Controls */
+        .star-rating-box {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.6rem;
+            color: rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+            padding: 0.4rem 0;
+        }
+
+        .star-rating-box i {
+            transition: color 0.2s ease, transform 0.2s ease;
+        }
+
+        .star-rating-box i.selected,
+        .star-rating-box i.hovered {
+            color: var(--gold);
+            text-shadow: 0 0 12px rgba(255, 215, 0, 0.6);
+            transform: scale(1.1);
+        }
+
+        /* Score Sliders */
+        .score-slider-group {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.4rem;
+        }
+
+        .score-slider-item {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 0.8rem;
+            text-align: center;
+        }
+
+        .score-slider-item label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-bottom: 0.3rem;
+            display: block;
+        }
+
+        .score-val {
+            font-family: var(--font-subheading);
+            font-weight: 800;
+            font-size: 1.1rem;
+            color: var(--neon-orange);
+        }
+
+        .range-input {
+            width: 100%;
+            accent-color: var(--neon-orange);
+            cursor: pointer;
+        }
+
+        /* Community Reviews Feed Side */
+        .feed-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .feed-card {
+            background: var(--color-surface);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 18px;
+            padding: 1.5rem;
+            backdrop-filter: blur(15px);
+            transition: var(--transition-smooth);
+        }
+
+        .feed-card:hover {
+            border-color: var(--neon-blue);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+        }
+
+        .feed-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.8rem;
+        }
+
+        .feed-user-info {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .feed-avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-weight: 800;
+            font-family: var(--font-heading);
+            font-size: 1rem;
+        }
+
+        .feed-username {
+            font-family: var(--font-heading);
+            font-size: 1rem;
+            color: #fff;
+            margin: 0;
+        }
+
+        .feed-platform-tag {
+            font-size: 0.72rem;
+            color: var(--neon-blue);
+            font-family: var(--font-subheading);
+            font-weight: 700;
+        }
+
+        .feed-game-title {
+            color: var(--neon-orange);
+            font-family: var(--font-heading);
+            font-size: 1.15rem;
+            margin-bottom: 0.4rem;
+        }
+
+        .feed-stars {
+            color: var(--gold);
+            font-size: 0.85rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .feed-comment {
+            color: var(--text-secondary);
+            font-size: 0.92rem;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        @media (max-width: 992px) {
+            .feedback-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Pop Message Modal Custom Styles */
+        .modal-card-pop {
+            background: rgba(12, 15, 25, 0.96);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 22px;
+            padding: 2.2rem;
+            width: 90%;
+            max-width: 520px;
+            position: relative;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9), 0 0 35px rgba(255, 43, 61, 0.2);
+            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(20px);
+            transform: scale(0.85);
+            opacity: 0;
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+            text-align: center;
+        }
+
+        .modal-overlay.active .modal-card-pop {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        .pop-icon-circle {
+            width: 76px;
+            height: 76px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.4rem;
+            margin: 0 auto 1.2rem auto;
+        }
+
+        .pop-icon-circle.error {
+            background: rgba(255, 43, 61, 0.15);
+            color: #ff2b3d;
+            border: 2px solid rgba(255, 43, 61, 0.6);
+            box-shadow: 0 0 25px rgba(255, 43, 61, 0.4);
+            animation: popPulse 2s infinite ease-in-out;
+        }
+
+        .pop-icon-circle.success {
+            background: rgba(0, 230, 118, 0.15);
+            color: #00e676;
+            border: 2px solid rgba(0, 230, 118, 0.6);
+            box-shadow: 0 0 25px rgba(0, 230, 118, 0.4);
+        }
+
+        @keyframes popPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.08); }
+        }
+
+        .pop-title {
+            font-family: var(--font-heading);
+            font-size: 1.4rem;
+            color: #ffffff;
+            margin-bottom: 0.6rem;
+        }
+
+        .pop-message {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .pop-guidance-box {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 0.9rem 1.1rem;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-bottom: 1.6rem;
+            text-align: left;
+        }
+
+        .id-status-badge {
+            position: absolute;
+            right: 0.8rem;
+            font-size: 0.72rem;
+            font-family: var(--font-subheading);
+            font-weight: 800;
+            padding: 0.25rem 0.65rem;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            pointer-events: none;
+            transition: all 0.2s ease;
+        }
+
+        .id-status-badge.valid {
+            background: rgba(0, 230, 118, 0.15);
+            color: #00e676;
+            border: 1px solid rgba(0, 230, 118, 0.4);
+        }
+
+        .id-status-badge.invalid {
+            background: rgba(255, 43, 61, 0.15);
+            color: #ff2b3d;
+            border: 1px solid rgba(255, 43, 61, 0.4);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Mouse Glow & Custom Gaming Cursor Follower -->
+    <div class="cursor-glow" id="cursorGlow"></div>
+    <div class="custom-cursor-dot" id="cursorDot"></div>
+    <div class="custom-cursor-ring" id="cursorRing"></div>
+
+    <!-- Navigation Header -->
+    <header class="navbar scrolled" id="navbar">
+        <div class="nav-container">
+            <a href="landing.html" class="nav-logo">
+                <img src="images/logo.png" alt="NOVAForge Logo" class="nav-logo-img">
+                <span class="nav-logo-text">NOVA<span class="highlight">Forge</span></span>
+            </a>
+
+            <nav class="nav-menu" id="navMenu">
+                <a href="landing.html#hero" class="nav-link">Home</a>
+                <a href="landing.html#finished-games" class="nav-link">Finished Games</a>
+                <a href="landing.html#recommendations" class="nav-link">Next To Play</a>
+                <a href="landing.html#platforms" class="nav-link">Platforms</a>
+                <a href="feedback.html" class="nav-link active"><i class="fa-solid fa-comment-dots"></i> Feedback Portal</a>
+            </nav>
+
+            <div class="nav-actions">
+                <a href="landing.html" class="btn btn-secondary" style="padding: 0.5rem 1rem; font-size: 0.82rem;">
+                    <i class="fa-solid fa-arrow-left"></i> Return to Dashboard
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="section-padding feedback-hero">
+        <div class="section-container">
+            <div class="section-header text-center reveal-up" style="margin-bottom: 2.5rem;">
+                <span class="section-tag"><i class="fa-solid fa-star"></i> POST-GAME COMPLETION LOG</span>
+                <h2 class="section-title">Gamer Completion <span class="highlight">Feedback & Reviews</span></h2>
+                <p class="section-desc">Submit verified campaign completion feedback, rate narrative and gameplay mechanics, and authenticate your review with your Gamer ID.</p>
+            </div>
+
+            <!-- Feedback Grid: Form & Live Community Feed -->
+            <div class="feedback-grid">
+                
+                <!-- Left Column: Interactive Review Form -->
+                <div class="form-card">
+                    <h3 style="font-family: var(--font-heading); color: #fff; font-size: 1.4rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.6rem;">
+                        <i class="fa-solid fa-pen-to-square" style="color: var(--neon-blue);"></i> Submit Game Completion Log
+                    </h3>
+
+                    <!-- Alert Message Container for Invalid / Wrong Gamer ID -->
+                    <div id="alertMessageContainer"></div>
+
+                    <form id="gamerFeedbackForm" novalidate>
+                        
+                        <!-- Gamer ID (GamerTag) Field -->
+                        <div class="form-group">
+                            <label for="gamerId">Gamer ID / GamerTag <span style="color: var(--neon-orange);">*</span></label>
+                            <div class="input-icon-wrapper">
+                                <i class="fa-solid fa-user-ninja field-icon"></i>
+                                <input type="text" id="gamerId" class="form-control" placeholder="CyberKnight_99" value="CyberKnight_99" required>
+                                <span id="gamerIdStatusBadge" class="id-status-badge valid"><i class="fa-solid fa-circle-check"></i> Valid ID</span>
+                            </div>
+                            <div id="gamerIdHelpText" class="id-help-text" style="margin-top: 0.35rem;">
+                                <small style="color: var(--text-muted); font-size: 0.78rem;">
+                                    <i class="fa-solid fa-shield-halved"></i> Verified against PlayStation, Xbox, & Steam cloud databases.
+                                </small>
+                            </div>
+                        </div>
+
+                        <!-- Target Game Title Selector -->
+                        <div class="form-group">
+                            <label for="gameTitle">Completed Game Title <span style="color: var(--neon-orange);">*</span></label>
+                            <div class="input-icon-wrapper">
+                                <i class="fa-solid fa-gamepad field-icon"></i>
+                                <select id="gameTitle" class="form-control" required>
+                                    <option value="Marvel's Spider-Man 2">Marvel's Spider-Man 2</option>
+                                    <option value="Cyberpunk 2077">Cyberpunk 2077</option>
+                                    <option value="Red Dead Redemption 2">Red Dead Redemption 2</option>
+                                    <option value="God of War Ragnarok">God of War Ragnarok</option>
+                                    <option value="Ghost of Tsushima">Ghost of Tsushima</option>
+                                    <option value="The Last of Us Part II">The Last of Us Part II</option>
+                                    <option value="Resident Evil Requiem">Resident Evil Requiem</option>
+                                    <option value="007 First Light">007 First Light</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Gaming Platform & Completion Trophy Row -->
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;" class="form-group">
+                            <div>
+                                <label for="platform">Synced Platform</label>
+                                <div class="input-icon-wrapper">
+                                    <i class="fa-solid fa-laptop-code field-icon"></i>
+                                    <select id="platform" class="form-control">
+                                        <option value="PlayStation 5 (PSN)">PlayStation 5 (PSN)</option>
+                                        <option value="PC / Steam">PC / Steam</option>
+                                        <option value="Xbox Series X">Xbox Series X</option>
+                                        <option value="Epic Games Store">Epic Games Store</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div>
+                                <label for="completionStatus">Completion Status</label>
+                                <div class="input-icon-wrapper">
+                                    <i class="fa-solid fa-trophy field-icon"></i>
+                                    <select id="completionStatus" class="form-control">
+                                        <option value="100% Platinum Trophy">100% Platinum Trophy</option>
+                                        <option value="Main Campaign Complete">Main Campaign Complete</option>
+                                        <option value="100% Mastered Compendium">100% Mastered Compendium</option>
+                                        <option value="S-Rank Professional Survivor">S-Rank Professional Survivor</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Playtime Hours & Star Rating -->
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;" class="form-group">
+                            <div>
+                                <label for="hoursPlayed">Hours Invested</label>
+                                <div class="input-icon-wrapper">
+                                    <i class="fa-solid fa-clock field-icon"></i>
+                                    <input type="number" id="hoursPlayed" class="form-control" value="65" min="1" max="999">
+                                </div>
+                            </div>
+                            <div>
+                                <label>Overall Rating</label>
+                                <div class="star-rating-box" id="starRatingBox">
+                                    <i class="fa-solid fa-star selected" data-value="1"></i>
+                                    <i class="fa-solid fa-star selected" data-value="2"></i>
+                                    <i class="fa-solid fa-star selected" data-value="3"></i>
+                                    <i class="fa-solid fa-star selected" data-value="4"></i>
+                                    <i class="fa-solid fa-star selected" data-value="5"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Sub-Category Scores -->
+                        <label style="display:block; font-family:var(--font-subheading); font-size:0.88rem; font-weight:700; color:var(--text-primary); margin-bottom:0.5rem;">
+                            Category Score Breakdown (1 - 10)
+                        </label>
+                        <div class="score-slider-group">
+                            <div class="score-slider-item">
+                                <label>STORY & QUESTS</label>
+                                <div class="score-val" id="storyScoreVal">9.5</div>
+                                <input type="range" min="1" max="10" step="0.5" value="9.5" class="range-input" oninput="document.getElementById('storyScoreVal').textContent=this.value">
+                            </div>
+                            <div class="score-slider-item">
+                                <label>GAMEPLAY & COMBAT</label>
+                                <div class="score-val" id="combatScoreVal">10.0</div>
+                                <input type="range" min="1" max="10" step="0.5" value="10" class="range-input" oninput="document.getElementById('combatScoreVal').textContent=this.value">
+                            </div>
+                            <div class="score-slider-item">
+                                <label>VISUALS & FX</label>
+                                <div class="score-val" id="visualsScoreVal">9.8</div>
+                                <input type="range" min="1" max="10" step="0.5" value="9.8" class="range-input" oninput="document.getElementById('visualsScoreVal').textContent=this.value">
+                            </div>
+                        </div>
+
+                        <!-- Gamer Review Textarea -->
+                        <div class="form-group">
+                            <label for="reviewText">Gamer Completion Notes & Feedback <span style="color: var(--neon-orange);">*</span></label>
+                            <div class="input-icon-wrapper">
+                                <i class="fa-solid fa-quote-left field-icon" style="top: 1.1rem;"></i>
+                                <textarea id="reviewText" class="form-control" rows="4" style="resize: vertical; padding-top: 0.9rem;" placeholder="Share your experience, favorite boss fight, suit builds, or story thoughts..." required>Phenomenal gameplay experience! The combat responsiveness, traversal mechanics, and endgame boss fights exceeded all expectations. Unlocked all trophy rewards.</textarea>
+                            </div>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <button type="submit" class="btn btn-primary btn-glow" style="width: 100%; padding: 0.95rem; font-size: 0.95rem;">
+                            <i class="fa-solid fa-paper-plane"></i> AUTHENTICATE & PUBLISH GAMER REVIEW
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Right Column: Live Verified Community Feed -->
+                <div>
+                    <h3 style="font-family: var(--font-heading); color: #fff; font-size: 1.4rem; margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: space-between;">
+                        <span><i class="fa-solid fa-comments" style="color: var(--neon-purple);"></i> Community Verified Reviews</span>
+                        <span style="font-size: 0.8rem; background: rgba(0,240,255,0.1); color: var(--neon-blue); padding: 0.3rem 0.7rem; border-radius: 20px; font-family: var(--font-subheading); font-weight: 700;">
+                            LIVE FEED
+                        </span>
+                    </h3>
+
+                    <div class="feed-container" id="communityFeedContainer">
+                        <!-- Initial Sample Reviews -->
+                        <div class="feed-card">
+                            <div class="feed-header">
+                                <div class="feed-user-info">
+                                    <div class="feed-avatar">CK</div>
+                                    <div>
+                                        <h4 class="feed-username">CyberKnight_99</h4>
+                                        <span class="feed-platform-tag"><i class="fa-brands fa-playstation"></i> PlayStation 5 • 100% Platinum</span>
+                                    </div>
+                                </div>
+                                <div class="feed-stars">
+                                    <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                                </div>
+                            </div>
+                            <h4 class="feed-game-title">Marvel's Spider-Man 2</h4>
+                            <p class="feed-comment">
+                                "The fast-travel speeds, web-wings traversal, and symbiote combat mechanics are legendary! Claimed the Brand New Day suit reward and maxed out all district objectives."
+                            </p>
+                        </div>
+
+                        <div class="feed-card">
+                            <div class="feed-header">
+                                <div class="feed-user-info">
+                                    <div class="feed-avatar" style="background: linear-gradient(135deg, #ff9100, #ff2b3d);">NV</div>
+                                    <div>
+                                        <h4 class="feed-username">NeonViper_X</h4>
+                                        <span class="feed-platform-tag" style="color: var(--neon-orange);"><i class="fa-brands fa-steam"></i> Steam • 140 Hours Played</span>
+                                    </div>
+                                </div>
+                                <div class="feed-stars">
+                                    <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                                </div>
+                            </div>
+                            <h4 class="feed-game-title">Cyberpunk 2077</h4>
+                            <p class="feed-comment">
+                                "Phantom Liberty expansion is a masterclass in cyberpunk storytelling. Running at 120 FPS on RTX 4090 with Path Tracing enabled is mind blowing!"
+                            </p>
+                        </div>
+
+                        <div class="feed-card">
+                            <div class="feed-header">
+                                <div class="feed-user-info">
+                                    <div class="feed-avatar" style="background: linear-gradient(135deg, #107c41, #00e676);">SG</div>
+                                    <div>
+                                        <h4 class="feed-username">ShadowGamer_007</h4>
+                                        <span class="feed-platform-tag" style="color: var(--neon-green);"><i class="fa-brands fa-xbox"></i> Xbox Series X • Story Complete</span>
+                                    </div>
+                                </div>
+                                <div class="feed-stars">
+                                    <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star-half-stroke"></i>
+                                </div>
+                            </div>
+                            <h4 class="feed-game-title">God of War Ragnarok</h4>
+                            <p class="feed-comment">
+                                "Conquered the Nine Realms and defeated Gna after 20 attempts! The Valhalla roguelite DLC expansion was an unforgettable emotional wrap up."
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer Notice -->
+    <footer style="border-top: 1px solid rgba(255,255,255,0.08); padding: 2rem 0; text-align: center; color: var(--text-muted); font-size: 0.88rem;">
+        <p>&copy; 2026 NOVAForge Gamer Command Center. All gamer completion feedback is authenticated via cloud gaming APIs.</p>
+    </footer>
+
+    <!-- Gamer Alert Pop Message Modal -->
+    <div class="modal-overlay" id="feedbackPopModal">
+        <div class="modal-card-pop">
+            <button class="modal-close" onclick="closePopModal()">&times;</button>
+            <div id="popModalBody"></div>
+        </div>
+    </div>
+
+    <!-- Toast Popup -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script src="js/landing.js"></script>
+    <script>
+        // Interactive Star Rating & Gamer ID Validation Logic for Feedback Page
+        document.addEventListener('DOMContentLoaded', () => {
+            // Auto-detect ?game= URL parameter and set dropdown
+            const urlParams = new URLSearchParams(window.location.search);
+            const gameParam = urlParams.get('game');
+            const gameSelect = document.getElementById('gameTitle');
+            
+            if (gameParam && gameSelect) {
+                const decodedGame = decodeURIComponent(gameParam);
+                for (let option of gameSelect.options) {
+                    if (option.value.toLowerCase().includes(decodedGame.toLowerCase()) || decodedGame.toLowerCase().includes(option.value.toLowerCase())) {
+                        option.selected = true;
+                        break;
+                    }
+                }
+            }
+
+            // Star Rating Selector
+            const starBox = document.getElementById('starRatingBox');
+            if (starBox) {
+                const stars = starBox.querySelectorAll('i');
+                let currentRating = 5;
+
+                stars.forEach(star => {
+                    star.addEventListener('click', () => {
+                        currentRating = parseInt(star.getAttribute('data-value'));
+                        updateStars(currentRating);
+                    });
+
+                    star.addEventListener('mouseover', () => {
+                        const hoverVal = parseInt(star.getAttribute('data-value'));
+                        stars.forEach((s, idx) => {
+                            if (idx < hoverVal) {
+                                s.classList.add('hovered');
+                            } else {
+                                s.classList.remove('hovered');
+                            }
+                        });
+                    });
+
+                    star.addEventListener('mouseout', () => {
+                        stars.forEach(s => s.classList.remove('hovered'));
+                    });
+                });
+
+                function updateStars(val) {
+                    stars.forEach((s, idx) => {
+                        if (idx < val) {
+                            s.classList.add('selected');
+                        } else {
+                            s.classList.remove('selected');
+                        }
+                    });
+                }
+            }
+
+            // Gamer ID Validation & Submission Handler
+            const feedbackForm = document.getElementById('gamerFeedbackForm');
+            const alertContainer = document.getElementById('alertMessageContainer');
+            const gamerIdInput = document.getElementById('gamerId');
+            const gamerIdBadge = document.getElementById('gamerIdStatusBadge');
+            const gamerIdHelpText = document.getElementById('gamerIdHelpText');
+            const platformSelect = document.getElementById('platform');
+
+            // Live Input Validation
+            if (gamerIdInput) {
+                gamerIdInput.addEventListener('input', () => {
+                    const rawVal = gamerIdInput.value;
+                    const selectedPlatform = platformSelect ? platformSelect.value : 'PlayStation 5 (PSN)';
+                    const error = checkGamerIdError(rawVal, selectedPlatform);
+
+                    if (error) {
+                        gamerIdInput.classList.add('is-invalid');
+                        if (gamerIdBadge) {
+                            gamerIdBadge.className = 'id-status-badge invalid';
+                            gamerIdBadge.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> Invalid ID`;
+                        }
+                        if (gamerIdHelpText) {
+                            gamerIdHelpText.innerHTML = `<small style="color: #ff2b3d; font-size: 0.78rem; font-weight: 600;">${error.guidance}</small>`;
+                        }
+                    } else {
+                        gamerIdInput.classList.remove('is-invalid');
+                        if (gamerIdBadge) {
+                            gamerIdBadge.className = 'id-status-badge valid';
+                            gamerIdBadge.innerHTML = `<i class="fa-solid fa-circle-check"></i> Valid ID`;
+                        }
+                        if (gamerIdHelpText) {
+                            gamerIdHelpText.innerHTML = `<small style="color: var(--text-muted); font-size: 0.78rem;"><i class="fa-solid fa-shield-halved"></i> Verified against PlayStation, Xbox, & Steam cloud databases.</small>`;
+                        }
+                    }
+                });
+            }
+
+            if (feedbackForm) {
+                feedbackForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    
+                    const gamerId = gamerIdInput.value;
+                    const gameTitle = document.getElementById('gameTitle').value;
+                    const platform = platformSelect ? platformSelect.value : 'PlayStation 5 (PSN)';
+                    const completionStatus = document.getElementById('completionStatus').value;
+                    const reviewText = document.getElementById('reviewText').value.trim();
+
+                    // Check for validation error
+                    const validationError = checkGamerIdError(gamerId, platform);
+
+                    if (validationError) {
+                        gamerIdInput.classList.add('is-invalid');
+                        
+                        // 1. Render Specific Alert Message Box on page
+                        alertContainer.innerHTML = `
+                            <div class="alert-box error" id="errorAlertBox">
+                                <div class="alert-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                                <div class="alert-content">
+                                    <h4>${validationError.title}</h4>
+                                    <p>${validationError.message}</p>
+                                    <small>${validationError.guidance}</small>
+                                </div>
+                            </div>
+                        `;
+
+                        // 2. Open High-Impact Pop Message Modal
+                        openPopModal(validationError.title, validationError.message, validationError.guidance, true);
+
+                        // Scroll smoothly to alert box
+                        alertContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                        gamerIdInput.focus();
+
+                        if (typeof showToast === 'function') {
+                            showToast(`Validation Error: ${validationError.title}`, 'error');
+                        }
+                        return;
+                    }
+
+                    // Remove invalid styling if valid
+                    gamerIdInput.classList.remove('is-invalid');
+
+                    // Show Success Alert Box
+                    const successMessage = `Your feedback for <strong>${escapeHtml(gameTitle)}</strong> has been verified with Gamer ID <code>${escapeHtml(gamerId.trim())}</code> and published to the NOVAForge Community Feed.`;
+                    const successGuidance = `<i class="fa-solid fa-globe"></i> Published live to NOVAForge Gamer Community Feed.`;
+
+                    alertContainer.innerHTML = `
+                        <div class="alert-box success">
+                            <div class="alert-icon"><i class="fa-solid fa-circle-check"></i></div>
+                            <div class="alert-content">
+                                <h4>GAME COMPLETION FEEDBACK SYNCED!</h4>
+                                <p>${successMessage}</p>
+                            </div>
+                        </div>
+                    `;
+
+                    // Trigger Success Pop Message Modal
+                    openPopModal('GAME COMPLETION FEEDBACK SYNCED!', successMessage, successGuidance, false);
+
+                    // Prepend new review card to Community Feed
+                    const feedContainer = document.getElementById('communityFeedContainer');
+                    if (feedContainer) {
+                        const newCard = document.createElement('div');
+                        newCard.className = 'feed-card';
+                        newCard.style.animation = 'fadeIn 0.5s ease-out';
+                        newCard.innerHTML = `
+                            <div class="feed-header">
+                                <div class="feed-user-info">
+                                    <div class="feed-avatar" style="background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));">${escapeHtml(gamerId.trim().substring(0, 2).toUpperCase())}</div>
+                                    <div>
+                                        <h4 class="feed-username">${escapeHtml(gamerId.trim())}</h4>
+                                        <span class="feed-platform-tag"><i class="fa-solid fa-check-circle"></i> ${escapeHtml(platform)} • ${escapeHtml(completionStatus)}</span>
+                                    </div>
+                                </div>
+                                <div class="feed-stars">
+                                    <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                                </div>
+                            </div>
+                            <h4 class="feed-game-title">${escapeHtml(gameTitle)}</h4>
+                            <p class="feed-comment">"${escapeHtml(reviewText)}"</p>
+                        `;
+                        feedContainer.prepend(newCard);
+                    }
+
+                    if (typeof showToast === 'function') {
+                        showToast('Feedback Published to NOVAForge Community Feed!', 'success');
+                    }
+                });
+            }
+
+            function checkGamerIdError(id, platform) {
+                if (!id || id.trim() === '') {
+                    return {
+                        title: 'GAMER ID MISSING!',
+                        message: 'The Gamer ID field cannot be left blank.',
+                        guidance: '<i class="fa-solid fa-circle-info"></i> Please enter your registered GamerTag (e.g. <code>CyberKnight_99</code>).'
+                    };
+                }
+
+                const trimmed = id.trim();
+
+                if (trimmed.length < 4) {
+                    const missingCount = 4 - trimmed.length;
+                    return {
+                        title: 'GAMER ID TOO SHORT (MISSING CHARACTERS)',
+                        message: `Gamer ID "<strong>${escapeHtml(trimmed)}</strong>" is missing required characters! Only <strong>${trimmed.length}</strong> character${trimmed.length === 1 ? '' : 's'} entered.`,
+                        guidance: `<i class="fa-solid fa-triangle-exclamation"></i> <strong>Missing ${missingCount} character${missingCount === 1 ? '' : 's'}!</strong> Minimum 4 characters required for ${escapeHtml(platform)} authentication.`
+                    };
+                }
+
+                if (trimmed.length > 20) {
+                    const excessCount = trimmed.length - 20;
+                    return {
+                        title: 'GAMER ID EXCEEDS MAXIMUM LENGTH',
+                        message: `Gamer ID "<strong>${escapeHtml(trimmed)}</strong>" exceeds the 20-character limit (<strong>${trimmed.length}</strong> characters entered).`,
+                        guidance: `<i class="fa-solid fa-triangle-exclamation"></i> Please remove <strong>${excessCount}</strong> character${excessCount === 1 ? '' : 's'}. GamerTags must be between 4 and 20 characters.`
+                    };
+                }
+
+                // Check for forbidden special symbols (spaces, @, #, $, %, !, &, *, etc.)
+                const invalidCharRegex = /[^a-zA-Z0-9_-]/;
+                if (invalidCharRegex.test(trimmed)) {
+                    const invalidMatches = trimmed.match(/[^a-zA-Z0-9_-]/g);
+                    const uniqueSymbols = Array.from(new Set(invalidMatches)).join(' ');
+                    return {
+                        title: 'INVALID CHARACTERS IN GAMER ID',
+                        message: `Gamer ID "<strong>${escapeHtml(trimmed)}</strong>" contains unsupported special symbols (<code>${escapeHtml(uniqueSymbols)}</code>).`,
+                        guidance: `<i class="fa-solid fa-circle-xmark"></i> Only letters (A-Z), numbers (0-9), underscores (<code>_</code>), and hyphens (<code>-</code>) are allowed. Spaces and symbols like <code>@ # $ % !</code> are forbidden.`
+                    };
+                }
+
+                // Check for mock mismatched or unknown IDs
+                const lower = trimmed.toLowerCase();
+                const mockMismatches = ['wrong', 'invalid', 'wrong_id', 'wrongid', '1234', 'test', 'unknown', 'fake_user', 'admin'];
+                if (mockMismatches.includes(lower)) {
+                    return {
+                        title: 'GAMER ID CLOUD MISMATCH ERROR',
+                        message: `Gamer ID "<strong>${escapeHtml(trimmed)}</strong>" does not match any synced profile in your connected ${escapeHtml(platform)} account database!`,
+                        guidance: `<i class="fa-solid fa-triangle-exclamation"></i> GamerTag not found. Please enter your valid registered GamerTag (e.g. <code>CyberKnight_99</code>) or sync your profile.`
+                    };
+                }
+
+                return null; // Valid!
+            }
+
+            function escapeHtml(str) {
+                return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+            }
+        });
+
+        // Global Pop Message Modal Controls
+        function openPopModal(title, message, guidance, isError = true) {
+            const modal = document.getElementById('feedbackPopModal');
+            const modalBody = document.getElementById('popModalBody');
+            if (!modal || !modalBody) return;
+
+            const iconClass = isError ? 'pop-icon-circle error' : 'pop-icon-circle success';
+            const iconHTML = isError ? '<i class="fa-solid fa-triangle-exclamation"></i>' : '<i class="fa-solid fa-circle-check"></i>';
+            
+            let actionsHTML = '';
+            if (isError) {
+                actionsHTML = `
+                    <div style="display: flex; gap: 0.8rem; margin-top: 1rem;">
+                        <button class="btn btn-primary btn-glow" style="flex: 1; padding: 0.75rem;" onclick="closePopModal(); document.getElementById('gamerId').focus();">
+                            <i class="fa-solid fa-pen"></i> RE-ENTER ID
+                        </button>
+                        <a href="landing.html#platforms" class="btn btn-secondary" style="flex: 1; text-align: center; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 0.4rem; padding: 0.75rem;">
+                            <i class="fa-solid fa-sync"></i> SYNC ACCOUNT
+                        </a>
+                    </div>
+                `;
+            } else {
+                actionsHTML = `
+                    <button class="btn btn-primary btn-glow" style="width: 100%; margin-top: 1rem; padding: 0.75rem;" onclick="closePopModal();">
+                        <i class="fa-solid fa-check"></i> CONTINUE EXPLORING
+                    </button>
+                `;
+            }
+
+            modalBody.innerHTML = `
+                <div class="${iconClass}">
+                    ${iconHTML}
+                </div>
+                <h3 class="pop-title">${title}</h3>
+                <p class="pop-message">${message}</p>
+                <div class="pop-guidance-box">${guidance}</div>
+                ${actionsHTML}
+            `;
+
+            modal.classList.add('active');
+        }
+
+        function closePopModal() {
+            const modal = document.getElementById('feedbackPopModal');
+            if (modal) {
+                modal.classList.remove('active');
+            }
+        }
+    </script>
+</body>
+</html>

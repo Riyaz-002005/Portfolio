@@ -146,6 +146,86 @@ body {
     100% { transform: scale(1.2) translateY(-30px); opacity: 0.45; }
 }
 
+/* Custom Gaming Cursor System */
+html, body {
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M3 3L10.07 19.97L13.58 12.42L21.13 8.91L3 3Z' fill='%2300F0FF' stroke='%2307080E' stroke-width='1.5' stroke-linejoin='round'/%3E%3Ccircle cx='13.5' cy='12.5' r='1.5' fill='%23FF9100'/%3E%3C/svg%3E"), auto;
+}
+
+a, button, input, select, textarea, .glass-card, .btn, .social-btn, [role="button"] {
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28' fill='none'%3E%3Ccircle cx='14' cy='14' r='12' stroke='%2300F0FF' stroke-width='1.5' stroke-dasharray='4 2'/%3E%3Ccircle cx='14' cy='14' r='4' fill='%23FF2B3D'/%3E%3Cpath d='M14 2V6M14 22V26M2 14H6M22 14H26' stroke='%2300F0FF' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E") 14 14, pointer !important;
+}
+
+.custom-cursor-dot {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 7px;
+    height: 7px;
+    background: var(--neon-blue);
+    border-radius: 50%;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    z-index: 99999;
+    box-shadow: 0 0 10px var(--neon-blue), 0 0 20px var(--neon-blue);
+    transition: transform 0.1s ease, background 0.2s ease;
+}
+
+.custom-cursor-ring {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 36px;
+    height: 36px;
+    border: 1.5px solid rgba(0, 240, 255, 0.65);
+    border-radius: 50%;
+    pointer-events: none;
+    transform: translate(-50%, -50%) scale(1);
+    z-index: 99998;
+    box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
+    transition: width 0.25s ease, height 0.25s ease, border-color 0.25s ease, transform 0.2s ease, box-shadow 0.25s ease;
+}
+
+.custom-cursor-ring::before {
+    content: '';
+    position: absolute;
+    top: -4px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 2px;
+    height: 6px;
+    background: var(--neon-blue);
+}
+
+.custom-cursor-ring::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 2px;
+    height: 6px;
+    background: var(--neon-blue);
+}
+
+.custom-cursor-ring.hovered {
+    width: 48px;
+    height: 48px;
+    border-color: #ff2b3d;
+    transform: translate(-50%, -50%) scale(1.15) rotate(45deg);
+    box-shadow: 0 0 25px rgba(255, 43, 61, 0.7);
+}
+
+.custom-cursor-ring.hovered::before,
+.custom-cursor-ring.hovered::after {
+    background: #ff2b3d;
+}
+
+.custom-cursor-dot.hovered {
+    background: #ff2b3d;
+    box-shadow: 0 0 14px #ff2b3d, 0 0 28px #ff2b3d;
+    transform: translate(-50%, -50%) scale(1.6);
+}
+
 /* Mouse Glow Follower */
 .cursor-glow {
     position: fixed;
